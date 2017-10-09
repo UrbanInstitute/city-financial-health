@@ -1,3 +1,0 @@
-group,credit_score,credit_score_nonWhite,credit_score_white,delinquint_debt,delinquint_debt_amount,mortgate_foreclosure,housing_cost_burdened,eitc,unbanked,no_health_insurance,low_income,unemployment_rate,labor_force_participation,gini,pop_change_00-15
-City Average,652.2333333,590.2672414,702.9285714,0.407663212,1465.325,0.003768262,0.68581762,0.369789381,0.074916667,0.160163522,0.433024776,0.079850707,0.651500355,0.499966668,0.093696729
-Nat. Avg.,675,621,697,0.3398453,1565,0.002966375,0.613742292,0.316959411,0.07,0.14584583,0.330006301,0.062978856,0.631082416,0.481700003,0.142124385
