@@ -296,11 +296,17 @@ body{
 /*******************************       MAP      **********************************/
 /*********************************************************************************/
 
-#homeMap{
+#homeMap, #groupMap{
 	cursor: pointer;
 	width: 100%;
     position: absolute;
     top: 270px;
+}
+#homeMap{
+	top: 270px;
+}
+#groupMap{
+	top: -10px;
 }
 .states {
   fill: #e3e3e3;
@@ -314,7 +320,6 @@ body{
 	font-family: Lato;
 	font-size: 14px;
 	font-weight: bold;
-	opacity: 0;
 }
 
 .cell-path {
@@ -357,7 +362,7 @@ body{
 
 
 /*********************************************************************************/
-/*******************************       FOOTER      *******************************/
+/*****************************      HOME FOOTER      *****************************/
 /*********************************************************************************/
 
 #footerContainer{
@@ -405,4 +410,63 @@ body{
 #copyright{
 	margin-bottom: 100px;
 	display: inline-block;
+}
+
+
+/*********************************************************************************/
+/***************************       PAGE HIGHLIGHTS      **************************/
+/*********************************************************************************/
+#highlightsContainer{
+	margin-top: 230px;
+}
+#groupTitle{
+	font-size: 34px;
+    font-weight: bold;
+    border-left: 10px solid transparent;
+    padding-left: 10px;
+    margin-left: -20px;
+    margin-bottom: 40px;
+    line-height: 34px;
+    padding-top: 4px;
+}
+#highlightUl{
+	padding-left: 0px;
+}
+.highlightLi{
+	font-size: 18px;
+    font-style: italic;
+    text-align: left;
+    line-height: 26px;
+    list-style: initial;
+    padding-left: 20px;
+    margin-bottom: 40px;
+}
+#groupCitiesListContainer{
+    display: block;
+    float: left;
+    width: 190px;
+    margin-right: 50px;
+}
+#groupCitiesTitle{
+	font-size: 18px;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+.groupCity{
+	padding: 8px 0px 8px 16px;
+	color: #1696d2;
+	font-weight: bold;
+	font-size: 16px;
+	cursor: pointer;
+}
+.groupCity.even{
+	background: #F5F5F5;
+}
+
+/*********************************************************************************/
+/*******************************       CHARTZ      *******************************/
+/*********************************************************************************/
+
+#chartContainer{
+	margin-top: 610px;
 }

@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="description" content="DESC GOES HERE">
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <title></title>
+
+        <!--social metas-->  
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@urbaninstitute">
+        <meta name="twitter:creator" content="@urbaninstitute">
+        <meta name="twitter:title" content="The People's Sector: A Look at Nonprofit Gains and Losses">
+        <meta name="twitter:description" content="The nonprofit sector is diverse and local context matters. Urban’s interactive tool lets you slice data by city, state, and nonprofit type.">
+        <meta name="twitter:image" content="http://apps.urban.org/features/nonprofit-gains-and-losses/images/social.jpg">
+        <meta property="og:title" content="The People's Sector: A Look at Nonprofit Gains and Losses" />
+        <meta property="og:description" content="The nonprofit sector is diverse and local context matters. Urban’s interactive tool lets you slice data by city, state, and nonprofit type." />
+        <meta property="og:image" content="http://apps.urban.org/features/nonprofit-gains-and-losses/images/social.jpg" />
+        <meta property="og:image:type" content="image/jpeg">
+        <meta property="og:url" content="http://urbn.is/nonprofits">
+
+        <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic,900" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="css/urban-header.css">
+        <link rel="stylesheet" type="text/css" href="css/vendor/jquery-ui.css">
+</head>
+<body>
+
+  <!-- START HEADER -->
+  <div id="header-pinned" class="no-touch">
+     <a target="_blank" href="http://www.urban.org" title="Home" rel="home" class="site-logo"></a>
+  <div class="title"><span class="feature-link"><a href="http://www.urban.org/features" class="title-linkback" alt="Urban Institute logo">Features</a></div>
+  <div class="share-icons">
+      <div class="shareThisP">
+          <span onclick="toggle_visibility('shareBox');">
+                  <div class="shareThisB"></div>
+              </span>
+          <div class="shareThisW" id="shareBox">
+
+              <div class="addthis_toolbox addthis_default_style  "addthis:title="" addthis:url="">
+                  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//urbn.is/k12funding" target="_blank" class="addthis_button_facebook at300b" title="Facebook" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-facebook" style="background-color: rgb(48, 88, 145);"><span class="at_a11y">Share on facebook</span></span></a>
+
+                  <a href="http://twitter.com/intent/tweet?text=School%20funding%3A%20Do%20poor%20kids%20get%20their%20fair%20share%3F%20http%3A%2F%2Furbn.is%2Fk12funding%20(via%20%40urbaninstitute)" target="_blank" class="addthis_button_twitter at300b" title="Tweet" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-twitter" style="background-color: rgb(44, 168, 210);"><span class="at_a11y">Share on twitter</span></span></a>
+
+                  <a href="mailto:%20?Subject=New feature from the Urban Institute &amp;Body=Hi! I thought you'd be interested in this new feature from the Urban Institute: “School funding: Do poor kids get their fair share” http://urbn.is/k12funding" target="_blank" class="addthis_button_email at300b" target="_blank" title="Email" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-email" style="background-color: rgb(115, 138, 141);"><span class="at_a11y">Share on email</span></span></a>
+                  <div class="atclear"></div>
+              </div>
+
+          </div>
+      </div>
+  </div>
+  </div>
+  <div class="headerimage" id="heroimage">
+    <div class="wrapper headerwrapper">
+      <!-- <h1 class="div-title-block">School Funding: Do Poor Kids Get Their Fair Share?</h1> -->
+    </div>
+  </div>
+  <!-- END HEADER -->
+
+
+  <!-- START MENU -->
+  <div id = "menuBar">
+    <div id = "tabWrapper">
+      <div class = "menuTab home active">Home</div>
+      <span></span>
+      <div class = "menuTab cities">Cities</div>
+      <span></span>
+      <div class = "menuTab groups">Peer groups</div>
+    </div>
+  </div>
+  <!-- END MENU -->
+
+  <!-- MAIN CONTENT -->
+  <div id = "mainContent">
+    <!-- HIGHLIGHTS BLOCK -->
+    <div id = "highlightsContainer">
+      <div id = "groupTitle"></div>
+      <div id = "highlights"></div>
+    </div>
+
+    <!-- END HIGHLIGHTS BLOCK -->
+
+    <!-- START MAP BLOCK -->
+    <div id = "controlsContainer">
+        <div id = "groupCitiesListContainer">
+          <div id = "groupCitiesTitle">Cities in this peer group</div>
+          <div id = "groupCitiesList"></div>
+        </div>
+        <div id = "mapContainer">
+          <div id = "groupMap"></div>
+        </div>
+    </div>
+    <!-- END MAP BLOCK -->
+
+    <!-- CHART BLOCK -->
+    <div id = "chartContainer">
+      <div id = "chartKey"></div>
+      <div id = "charts"></div>
+      <div id = "chartSource"><span>Sources:</span> Urban Institute tabulation of data from a major credit bureau, the US Census Bureau, and other sources. For more information and definitions of the variables, see the technical appendix.</div>
+      <div id = "chartNote"><span>Note:</span> EITC = earned income tax credit.</div>
+      <div id = "printButton" class = "thicButton">Print</div>
+      <div id = "dataButton" class = "thicButton">Download data</div>
+    </div>
+    <!-- END CHART BLOCK -->
+
+    <!-- START APPROACHES BLOCK -->
+    <div id  = "approachesContainer">
+      <div id = "approachesTitle">Approaches cities can take</div>
+      <div class = "approachesIntro">Cities can take a variety of steps to improve their residents’ financial health. Strategies from workforce development to affordable housing are critical tools in this effort and can be enhanced alongside programs and policies that focus more directly on residents’ financial health.</div>
+      <div class = "approachesIntro">The following approaches are targeted to the needs, strengths, and challenges of this peer group. Residents’ needs are diverse and cities can tailor these broad strategies to their own local settings. Strategies targeted to other peer groups may still be useful for all cities. For the full list, please see our technical appendix.</div>
+      <div id = "approachesGroupName"></div>
+      <div id = "approachesList">
+      </div>
+    </div>
+    <!-- END APPROACHES BLOCK -->
+  </div>
+  <!-- END MAIN CONTENT -->
+
+  <!-- START BOTTOM CONTENT -->
+  <div id = "bottomCitiesContainer">
+    <div class = "bottomTitle">View cities in this peer group</div>
+    <div id = "bottomCitiesList"></div>
+  </div>
+
+  <div id = "bottomGroupsContainer">
+    <div class = "bottomTitle">View other peer groups</div>
+    <div id = "bottomGroupsList"></div>
+  </div>
+  <!-- END BOTTOM CONTENT -->
+
+  <!-- START FOOTER --> 
+  <div id = "smallFooter">
+    <div>Copyright &copy; November 2017. Urban Institute. View this project on GitHub.</div>
+  </div> 
+  <!-- END FOOTER -->  
+
+
+  <script src="js/vendor/d3.v4.min.js"></script>
+  <script src="js/vendor/topojson.v2.min.js"></script>
+  <script src="js/vendor/jquery.1.8.min.js"></script>
+  <script src="js/vendor/jquery-ui.min.js"></script>
+  <script src = "data/text.js"></script>
+  <script>var PAGE = "group"</script>
+  <script src = "js/main.js"></script>
+</body>a
+</html>

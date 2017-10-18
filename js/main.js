@@ -1,14 +1,19 @@
 var DESKTOP_RADIUS = 4.6;
 var DESKTOP_HOVER_RADIUS = 10;
 
+
+function getQueryString(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+};
+
 function getActiveGroup(){
   return false;
 }
 function getActiveCity(){
   return false;
-}
-function isHome(){
-  return true;
 }
 function IS_MOBILE(){
   return false;
@@ -19,6 +24,22 @@ function IS_PHONE(){
 function getGroupColor(group){
   var colors = [null,"#DB2B27","#73BFE2","#55B748","#EC008B","#1696D2","#12719E","#FDBF11","#9D9D9D", "#000000"]
   return colors[group]
+}
+function getPeerGroup(cities){
+  if(PAGE == "home"){
+    return false;
+  }
+  else if(PAGE == "group"){
+    if(getQueryString("peergroup") == ''){ return 1 }
+    else { return parseInt(getQueryString("peergroup")) }
+  }else{
+    if(getQueryString("city") == ''){ return 1 }
+    else{
+      var city = getQueryString("city")
+      var d = cities.filter(function(o){ return o.slug == city})
+      return d.group
+    }
+  }
 }
 function alphaSort(data){
   data.sort(function(a, b) {
@@ -74,7 +95,10 @@ function drawMap(containerID, us, cities){
       .attr("class", function(d){ return "city city_" + d.slug + " group_" + d.group  })
       .attr("cx", function(d){ return projection([d[0], d[1] ])[0]})
       .attr("cy", function(d){ return projection([d[0], d[1] ])[1]})
-      .attr("r", function(d){ return DESKTOP_RADIUS })
+      .attr("r", function(d){
+        if(PAGE == "home"){ return DESKTOP_RADIUS }
+        else{ return DESKTOP_HOVER_RADIUS }
+      })
       .attr("fill", function(d){ return getGroupColor(d.group)});
 
   dots.selectAll(".dummyText")
@@ -118,7 +142,11 @@ function drawMap(containerID, us, cities){
           return projection([d[0], d[1] ])[1] + 22;  
         }
       })
-      .text(function(d){ return d.city });
+      .text(function(d){ return d.city })
+      .style("opacity", function(){
+        if(PAGE == "home"){ return 0 }
+        else{ return 1 }
+      })
 
   var cell = svg.selectAll(".cell")
     .data(cities)
@@ -150,6 +178,47 @@ function typeCities(d){
   d.city = d.city;
   d.state = d.state;
   return d;
+}
+
+function buildGroupContent(groups){
+  var group = getPeerGroup();
+  d3.select("#groupTitle")
+    .text(groupNames[group])
+    .style("border-left", "10px solid " + getGroupColor(group))
+  var highlightUl = d3.select("#highlights").append("ul")
+    .attr("id", "highlightUl")
+  var highlights = groupHighlights[group]
+  for(var i =0; i < highlights.length; i++){
+    highlightUl.append("li")
+      .attr("class","highlightLi")
+      .html(highlights[i])
+  }
+  d3.select("#groupCitiesList")
+    .selectAll(".groupCity")
+    .data(groups)
+    .enter()
+    .append("div")
+    .attr("id", function(d){ return "groupCity_" + d.slug})
+    .attr("class", function(d,i){
+      if(i%2 == 0){ return "groupCity even"}
+      else{ return "groupCity odd"}
+    })
+    .text(function(d){ console.log(d); return d.city + ", " + d.state})
+    .on("mouseover", function(d){
+      d3.select("circle.city_" + d.slug).style("opacity",.5)
+      d3.select(this).style("color","#353535")
+    })
+    .on("mouseout", function(d){
+      d3.select("circle.city_" + d.slug).style("opacity",1)
+      d3.select(this).style("color","#1696d2")
+    })
+}
+function buildBottomContent(groups){
+
+}
+
+function buildCharts(cities){
+  var metrics = [["credit-overall","Median credit score"],["credit-white","Credit score, white areas"],["credit-non-white","Credit score, nonwhite areas"],["debt-percent","Delinquent debt"],["debt-amount","Median delinquent debt"],["foreclosure","Home foreclosure"],["cost-burdened","Housing-cost burdened, low-income"],["unbanked","Unbanked, metro area"],["health-insured","Health insurance coverage"],["eitc","Received EITC, low-income"],["unemployment","Unemployment rate"],["labor-force-participation","Labor force participation rate"],["low-income","Below 200% of federal poverty level"],["pop-change","Population change, 2000–15"],["gini","Gini index of income inequality"]]
 }
 
 function buildTooltip(cities){
@@ -209,7 +278,9 @@ function buildStateSelect(cities){
 function highlight(datum, isCity, action, cities){
   var city = datum.slug
   var group = datum.group
-  
+  if(PAGE == "city"){
+    return false
+  }
 /******** UPDATE MAP ************/
     d3.selectAll("circle")
       .transition()
@@ -254,8 +325,8 @@ function highlight(datum, isCity, action, cities){
     })
     .transition()
     .style("opacity", 1)
-/******** UPDATE TOOLTIP ************/
-  if(isHome()){
+/******** UPDATE TOOLTIP HOME ************/
+  if(PAGE == "home"){
     var d = datum;
 
     d3.selectAll(".groupListGroup")
@@ -309,20 +380,27 @@ function highlight(datum, isCity, action, cities){
 }
 
 function mouseout(cities){
-    d3.selectAll("circle")
-      .transition()
-      .attr("r", DESKTOP_RADIUS)
-      .style("opacity",1)
-    d3.selectAll(".cityText")
-      .transition()
-      .style("opacity", 0)
-    if(d3.selectAll("circle.clicked").nodes().length != 0){
-      var d = d3.select("circle.clicked").datum()
-      highlight(d, true, "click", cities)
+    if(PAGE == "home"){
+      d3.selectAll("circle")
+        .transition()
+        .attr("r", DESKTOP_RADIUS)
+        .style("opacity",1)
+      d3.selectAll(".cityText")
+        .transition()
+        .style("opacity", 0)
+      if(d3.selectAll("circle.clicked").nodes().length != 0){
+        var d = d3.select("circle.clicked").datum()
+        highlight(d, true, "click", cities)
+      }
+      else if(d3.selectAll(".groupListGroup.clicked").nodes().length != 0){
+        var d = d3.select(".groupListGroup.clicked").datum()
+        highlight(d, false, "click", cities)     
+      }
     }
-    else if(d3.selectAll(".groupListGroup.clicked").nodes().length != 0){
-      var d = d3.select(".groupListGroup.clicked").datum()
-      highlight(d, false, "click", cities)     
+    else if(PAGE == "group"){
+      d3.selectAll("circle")
+        .transition()
+        .style("opacity",1)
     }
 }
 
@@ -394,20 +472,36 @@ d3.json("data/map.json", function(error, us) {
   d3.tsv("data/cities.tsv")
     .row(typeCities)
     .get(function(error, cities){
+      if(PAGE == "home"){
+        buildTooltip(cities)
+        buildStateSelect(cities)
+        drawMap("homeMap", us, cities)
+        
+        d3.select(window)
+          .on("resize", function(){
+            drawMap("homeMap", us, cities)
+          });
+      }else{
+        var group = cities.filter(function(o){ return o.group == getPeerGroup(cities) })
+        alphaSort(group)
+        buildGroupContent(group)
+        buildBottomContent(group)
+        buildCharts(cities)
+        if(PAGE == "group"){
+          drawMap("groupMap", us, group)
+          
+          d3.select(window)
+            .on("resize", function(){
+              drawMap("groupMap", us, group)
+            });
+        }
+      }
 
-      buildTooltip(cities)
-      buildStateSelect(cities)
 
-      drawMap("homeMap", us, cities)
-      
-      d3.select(window)
-        .on("resize", function(){
-          drawMap("homeMap", us, cities)
-        });
+
 
       d3.select(".menuTab.cities")
         .on("mouseover", function(){ showCityMenu(cities) })
-        // .on("mouseout", hideMenu)
       d3.select(".menuTab.home")
         .on("mouseover", hideMenu)
       d3.select(".menuTab.groups")
