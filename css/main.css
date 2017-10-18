@@ -282,7 +282,15 @@ body{
     right: 0px;
     top: 0px;
 }
-
+#stateSelect-button{
+	top: 50px;
+}
+#stateSelect-button:focus{
+	outline: none;
+}
+#stateSelect{
+	display: none;
+}
 
 /*********************************************************************************/
 /*******************************       MAP      **********************************/
@@ -345,4 +353,56 @@ body{
     list-style: initial;
     padding-left: 20px;
     padding-bottom: 30px;
+}
+
+
+/*********************************************************************************/
+/*******************************       FOOTER      *******************************/
+/*********************************************************************************/
+
+#footerContainer{
+	margin-top: 90px;
+	background-color: #F5F5F5;
+}
+#footerContent{
+	width: 700px;
+	margin: 0 auto;
+}
+.footerHeader{
+	margin-top: 50px;
+	margin-bottom: 8px;
+	font-size: 34px;
+	font-weight: bold;
+	text-transform: uppercase;
+	display: inline-block;
+}
+#topFooterHeader{
+	padding-top: 44px;
+}
+.footerAbout, .footerCredits, .footerSpecialCredit{
+    font-size: 16px;
+    line-height: 26px;
+    color: #353535;
+}
+.footerSpecialCredit, #bottomFooterCredits{
+	margin-top: 45px;
+}
+#bottomFooterCredits{
+	margin-bottom: 45px;
+}
+.creditsHeader{
+	font-size: 16px;
+	font-weight: bold;
+	color: #353535;
+	text-transform: uppercase;
+}
+.creditsNames{
+	margin-bottom: 30px;
+	margin-top: 5px;
+	font-size: 16px;
+	color: #353535;
+}
+#copyright{
+	margin-bottom: 100px;
+	display: inline-block;
 }

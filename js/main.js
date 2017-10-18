@@ -188,6 +188,24 @@ function buildTooltip(cities){
   highlight(init, false, "hover", cities)
 }
 
+function buildStateSelect(cities){
+  alphaSort(cities)
+  d3.select("#stateSelect")
+    .selectAll("option")
+    .data(cities)
+    .enter()
+    .append("option")
+      .attr("value", function(d){ return d.slug})
+      .text(function(d){ return d.city + ", " + d.state})
+  $("#stateSelect" ).selectmenu({
+    change: function(event, d){
+      var slug = d.item.value
+      var d = cities.filter(function(o){ return o.slug == slug })[0]
+      highlight(d, true, "click", cities)
+    }
+  })
+}
+
 function highlight(datum, isCity, action, cities){
   var city = datum.slug
   var group = datum.group
@@ -202,6 +220,7 @@ function highlight(datum, isCity, action, cities){
       .style("opacity", 0)
 
   if(action == "click"){
+    if(isCity){ $("#stateSelect" ).val(city).selectmenu("refresh") }
     d3.selectAll(".clicked").classed("clicked", false)
     if(isCity){
       d3.select("circle.city_" + city)
@@ -377,6 +396,7 @@ d3.json("data/map.json", function(error, us) {
     .get(function(error, cities){
 
       buildTooltip(cities)
+      buildStateSelect(cities)
 
       drawMap("homeMap", us, cities)
       

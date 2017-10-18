@@ -25,6 +25,7 @@
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic,900" rel="stylesheet" type="text/css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
         <link rel="stylesheet" type="text/css" href="css/urban-header.css">
+        <link rel="stylesheet" type="text/css" href="css/vendor/jquery-ui.css">
 </head>
 <body>
 
@@ -101,7 +102,7 @@
           </div>
         </div>
         <div id = "stateSelectContainer">
-          <div>state select</div>
+          <select id = "stateSelect"></select>
         </div>
         <div id = "homeMap"></div>
       </div>
@@ -138,9 +139,55 @@
   </div>
   <!-- END MAIN CONTENT -->
 
+  <!-- START FOOTER -->
+  <div id = "footerContainer">
+    <div id = "footerContent">
+      <div class = "footerHeader" id = "topFooterHeader">About the data</div>
+      <p class = "footerAbout">This dashboard contains information derived from a random 2 percent sample of deidentified, consumer-level records from a major credit bureau, as well as estimates from summary tables of the US Census Bureau’s decennial census and the American Community Survey. Additional data were drawn from tabulations of IRS tax filing data by the Brookings Institution and the Federal Deposit Insurance Corporation’s National Survey of Unbanked and Underbanked Households.</p>
+      <p class = "footerAbout">View and download the technical appendix.</p>
+      <p class = "footerAbout">Please contact externalaffairs@urban.org for more information.</p>
+
+      <div class = "footerHeader">PROJECT CREDITS</div>
+      <p class = "footerCredits">This feature was funded by a grant from JPMorgan Chase. We are grateful to them and to all our funders, who make it possible for Urban to advance its mission. Special thanks to our advisory group members, listed below, many of whom work with cities to implement strategies like those recommended here. Their insights greatly informed and strengthened our work.</p>
+
+      <div class = "footerSpecialCredit">
+        <div>Heidi Goldberg, National League of Cities</div>
+        <div>Tamara Lindsay, Cities for Financial Empowerment Fund</div>
+        <div>Solana Rice, Prosperity Now</div>
+        <div>Anne Romatowski, JPMorgan Chase</div>
+        <div>Sarah Treuhaft, PolicyLink</div>
+      </div>
+
+      <p class = "footerCredits">Additionally, we are grateful to Elizabeth Kneebone and Cecile Murray for sharing tabulations of administrative IRS tax filing records from the Brookings Institution. We also thank Urban Institute colleagues Liza Getsinger, Solomon Greene, Courtney Jones, Elaine Maag, Erika Poethig, Ellen Seidman, and Shayne Spaulding for their valuable input and feedback, as well as Veronica Gaitan, Hannah Hassani, Emma Kalish, and Janae Ladet for research assistance and operations support.</p>
+
+      <p class = "footerCredits" id = "bottomFooterCredits">The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts. More information on our funding principles is available here. Read our terms of service here.</p>
+
+      <div class = "creditsHeader">RESEARCH</div>
+      <div class = "creditsNames">Caroline Ratcliffe, Cary Lou, Diana Elliott, and Signe-Mary McKernan</div>
+
+      <div class = "creditsHeader">DESIGN</div>
+      <div class = "creditsNames">Christina Baird</div>
+
+      <div class = "creditsHeader">DEVELOPMENT</div>
+      <div class = "creditsNames">Ben Chartoff</div>
+
+      <div class = "creditsHeader">EDITING</div>
+      <div class = "creditsNames">Elizabeth Forney</div>
+
+      <div class = "creditsHeader">WRITING</div>
+      <div class = "creditsNames">Caroline Ratcliffe, Cary Lou, Diana Elliott, Signe-Mary McKernan, and Serena Lei</div>
+
+      <div id = "copyright">Copyright &copy; November 2017. Urban Institute. View this project on GitHub. </div>
+
+    </div>
+  </div>
+  <!-- END FOOTER -->
+
+
   <script src="js/vendor/d3.v4.min.js"></script>
   <script src="js/vendor/topojson.v2.min.js"></script>
   <script src="js/vendor/jquery.1.8.min.js"></script>
+  <script src="js/vendor/jquery-ui.min.js"></script>
   <script src = "data/text.js"></script>
   <script src = "js/main.js"></script>
 </body>
