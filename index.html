@@ -27,10 +27,121 @@
         <link rel="stylesheet" type="text/css" href="css/urban-header.css">
 </head>
 <body>
-  <div id = "homeMap"></div>
+
+  <!-- START HEADER -->
+  <div id="header-pinned" class="no-touch">
+     <a target="_blank" href="http://www.urban.org" title="Home" rel="home" class="site-logo"></a>
+  <div class="title"><span class="feature-link"><a href="http://www.urban.org/features" class="title-linkback" alt="Urban Institute logo">Features</a></div>
+  <div class="share-icons">
+      <div class="shareThisP">
+          <span onclick="toggle_visibility('shareBox');">
+                  <div class="shareThisB"></div>
+              </span>
+          <div class="shareThisW" id="shareBox">
+
+              <div class="addthis_toolbox addthis_default_style  "addthis:title="" addthis:url="">
+                  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//urbn.is/k12funding" target="_blank" class="addthis_button_facebook at300b" title="Facebook" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-facebook" style="background-color: rgb(48, 88, 145);"><span class="at_a11y">Share on facebook</span></span></a>
+
+                  <a href="http://twitter.com/intent/tweet?text=School%20funding%3A%20Do%20poor%20kids%20get%20their%20fair%20share%3F%20http%3A%2F%2Furbn.is%2Fk12funding%20(via%20%40urbaninstitute)" target="_blank" class="addthis_button_twitter at300b" title="Tweet" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-twitter" style="background-color: rgb(44, 168, 210);"><span class="at_a11y">Share on twitter</span></span></a>
+
+                  <a href="mailto:%20?Subject=New feature from the Urban Institute &amp;Body=Hi! I thought you'd be interested in this new feature from the Urban Institute: “School funding: Do poor kids get their fair share” http://urbn.is/k12funding" target="_blank" class="addthis_button_email at300b" target="_blank" title="Email" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-email" style="background-color: rgb(115, 138, 141);"><span class="at_a11y">Share on email</span></span></a>
+                  <div class="atclear"></div>
+              </div>
+
+          </div>
+      </div>
+  </div>
+  </div>
+  <div class="headerimage" id="heroimage">
+    <div class="wrapper headerwrapper">
+      <!-- <h1 class="div-title-block">School Funding: Do Poor Kids Get Their Fair Share?</h1> -->
+    </div>
+  </div>
+  <!-- END HEADER -->
+
+
+  <!-- START MENU -->
+  <div id = "menuBar">
+    <div id = "tabWrapper">
+      <div class = "menuTab home active">Home</div>
+      <span></span>
+      <div class = "menuTab cities">Cities</div>
+      <span></span>
+      <div class = "menuTab groups">Peer groups</div>
+    </div>
+  </div>
+  <!-- END MENU -->
+
+  <!-- MAIN CONTENT -->
+  <div id = "mainContent">
+    <!-- TITLE BLOCK -->
+    <div id = "titleContainer">
+      <div id = "title">Financial Health of Residents:</div>
+      <div id = "subtitle">A City-Level Dashboard</div>
+
+      <p class = "introText">The financial health of cities is closely intertwined with that of its residents. Financially healthy residents are better able to weather difficult times, are less likely to need city supports and services, and can contribute more to the local economy by supporting property, sales, and income taxes.</p>
+      <p class = "introText">Our data dashboard provides a snapshot of residents’ financial health, including unique credit bureau data, to tell the story of each city’s financial health. While recognizing that every city is different and its residents’ needs diverse, we construct city peer groups to highlight shared challenges and promising interventions. What’s your city’s picture of financial health?</p>
+    </div>
+    <!-- END TITLE BLOCK -->
+
+    <!-- START MAP BLOCK -->
+    <div id = "controlsContainer">
+      <div id = "groupListContainer">
+        <div id = "groupListTitle">Peer groups</div>
+        <div id = "groupList"></div>
+      </div>
+      <div id = "mapContainer">
+        <div id = "tooltipContainer">
+          <div id = "tooltipTitle"></div>
+          <div id = "tooltipSubtitle">Is in the <span id = "subtitleGroupName"></span> peer group. <span id = "subtitleViewMore" href = "">View peer group metrics &gt;&gt;</span></div>
+          <div class = "thinButton" id = "tooltipViewMore" href = ""></div>
+          <div id = "tooltipCities">
+            <div id = "tooltipCitiesTitle">Cities in this peer group</div>
+            <div id = "tooltipCitiesList"></div>
+          </div>
+        </div>
+        <div id = "stateSelectContainer">
+          <div>state select</div>
+        </div>
+        <div id = "homeMap"></div>
+      </div>
+    </div>
+    <!-- END MAP BLOCK -->
+
+    <!-- START HOME BODY COPY -->
+    <div id = "homeCopy">
+      <div class = "copyHeader">Measuring residents&rsquo; financial health</div>
+      <p class = "copyP">Financial health is multidimensional. It reflects residents’ ability to manage daily finances, be resilient to economic shocks, such as an income drop or unexpected expense, and pursue opportunity to move ahead. We examine metrics that reflect these three dimensions of financial health.</p>
+      <p class = "copyP">To understand city residents’ ability to manage daily finances, we examine delinquent debt, mortgage foreclosures, and housing-cost burden. To understand residents’ resiliency to shocks, we measure credit scores, health insurance coverage, housing cost burden, and unbanked status. And to gauge residents’ abilities to pursue opportunity, we measure credit scores, mortgage foreclosure, housing-cost burden, unbanked rates, and earned income tax credit (EITC) receipt.</p>
+
+      <ul class = "copyUl">
+        <li>Having delinquent debt or a home foreclosure is a clear sign that people have had trouble paying their bills.</li>
+
+        <li>Low- and moderate-income residents who are housing-cost burdened (meaning they pay more than 30 percent of their income on housing) have less slack in their budgets and can struggle to manage daily finances. High housing-cost burdens can affect residents’ ability to create a savings cushion, which in turn, can lower their ability to absorb economic shocks and pursue opportunities (e.g., invest in a home). Even a savings cushion of $250 or more has been shown to increase resiliency.</li>
+
+        <li>Credit scores, which affect residents’ ability to borrow, can affect their ability to absorb a financial shock (e.g., by using a credit card for an unexpected expense) and their ability to pursue opportunity (e.g., through a home loan). A home foreclosure also affects residents’ ability to borrow and can have these same ripple effects.</li>
+
+        <li>Health insurance helps families pay for health emergencies and keeps people healthy and working, thereby providing resiliency. Medical bills are a significant and growing cost for families, a primary source of delinquent debt, and is a major cause of bankruptcy.</li>
+
+        <li>Not having a bank account suggests that residents’ needs are not being met by the traditional financial sector. It can also signal that residents have less access to safe, affordable loan products to help them weather unexpected financial needs or make investments in the future.</li>
+
+        <li>A large tax refund via the EITC can provide a financial cushion and help some families save for longer-term goals.</li>
+      </ul>
+
+      <div class = "copyHeader">Creating city peer groups</div>
+      <p class = "copyP">Family financial security matters for cities, but the relationship goes both ways. Residents’ ability to be financially secure is strongly influenced by whether local job markets are strong, housing is affordable, and growth and opportunity are inclusive. Even within cities, some residents will prosper while others need additional support to thrive. City peer groups offer a lens to view city characteristics and identify strategies that can be adapted to local context.</p>
+      <p class = "copyP">With that in mind, to create the city peer groups, we analyze 10 measures of residents’ financial health and the following 5 measures of cities’ economic health: unemployment rate, labor force participation rate, the share of the population with low incomes, income inequality, and population growth (or decline).</p>
+      <p class = "copyP">For more information about these metrics and how we analyzed and created the city peer groups, click here.</p>
+
+    </div>
+    <!-- END HOME BODY COPY -->
+  </div>
+  <!-- END MAIN CONTENT -->
+
   <script src="js/vendor/d3.v4.min.js"></script>
   <script src="js/vendor/topojson.v2.min.js"></script>
   <script src="js/vendor/jquery.1.8.min.js"></script>
+  <script src = "data/text.js"></script>
   <script src = "js/main.js"></script>
 </body>
 </html>

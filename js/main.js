@@ -1,10 +1,38 @@
 var DESKTOP_RADIUS = 4.6;
 var DESKTOP_HOVER_RADIUS = 10;
 
-
+function getActiveGroup(){
+  return false;
+}
+function getActiveCity(){
+  return false;
+}
+function isHome(){
+  return true;
+}
+function IS_MOBILE(){
+  return false;
+}
+function IS_PHONE(){
+  return false;
+}
 function getGroupColor(group){
   var colors = [null,"#DB2B27","#73BFE2","#55B748","#EC008B","#1696D2","#12719E","#FDBF11","#9D9D9D", "#000000"]
   return colors[group]
+}
+function alphaSort(data){
+  data.sort(function(a, b) {
+    var nameA = a.city.toUpperCase(); // ignore upper and lowercase
+    var nameB = b.city.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    // names must be equal
+    return 0;
+  });
 }
 function drawMap(containerID, us, cities){
 
@@ -97,10 +125,13 @@ function drawMap(containerID, us, cities){
     .enter().append("g")
       .attr("class", "cell")
       .on("mouseover", function(d){
-        mouseover(d.slug, d.group)
+        highlight(d, true, "hover", cities)
+      })
+      .on("click", function(d){
+        highlight(d, true, "click", cities)
       })
       .on("mouseout", function(d){
-        mouseout()
+        mouseout(cities)
       });
 
   cell.append("g")
@@ -121,8 +152,67 @@ function typeCities(d){
   return d;
 }
 
-function mouseover(city, group){
-  console.log(city, group)
+function buildTooltip(cities){
+  for(var i = 1; i < 10; i ++){
+    var datum = cities.filter(function(o){ return o.group == i })[0]
+    d3.select("#groupList")
+      .append("div")
+      .datum(datum)
+      .attr("class", "groupListGroup groupListGroup_" + i)
+      .text(groupNames[i])
+      .on("mouseover", function(d){
+        highlight(d, false, "hover", cities)
+      })
+      .on("mouseout", function(){
+        mouseout(cities)
+      })
+      .on("click", function(d){
+        highlight(d, false, "click", cities)
+      })
+    d3.select("#groupList")
+      .append("div")
+      .datum(datum)
+      .attr("class", "groupListSpace groupListSpace_" + i)
+      .on("mouseover", function(d){
+        highlight(d, false, "hover", cities)
+      })
+      .on("mouseout", function(){
+        mouseout(cities)
+      })
+      .on("click", function(d){
+        highlight(d, false, "click", cities)
+      })
+  }
+  var init = cities[0]
+
+  highlight(init, false, "hover", cities)
+}
+
+function highlight(datum, isCity, action, cities){
+  var city = datum.slug
+  var group = datum.group
+  
+/******** UPDATE MAP ************/
+    d3.selectAll("circle")
+      .transition()
+      .attr("r", DESKTOP_RADIUS)
+      .style("opacity",1)
+    d3.selectAll(".cityText")
+      .transition()
+      .style("opacity", 0)
+
+  if(action == "click"){
+    d3.selectAll(".clicked").classed("clicked", false)
+    if(isCity){
+      d3.select("circle.city_" + city)
+        .classed("clicked", true)
+    }else{
+      d3.select(".groupListGroup_" + group)
+        .classed("clicked", true)
+    }
+  }
+
+
   d3.selectAll("circle.group_" + group)
     .each(function(){
       this.parentNode.appendChild(this)
@@ -133,7 +223,7 @@ function mouseover(city, group){
       if(city == null){
         return 1;
       }
-      else if(d3.select(this).classed("city_" + city)){
+      else if(isCity && d3.select(this).classed("city_" + city)){
         return .5;
       }else{
         return 1;
@@ -145,27 +235,163 @@ function mouseover(city, group){
     })
     .transition()
     .style("opacity", 1)
+/******** UPDATE TOOLTIP ************/
+  if(isHome()){
+    var d = datum;
+
+    d3.selectAll(".groupListGroup")
+      .classed("active", false)
+      .style("border-left", "7px solid white")
+
+    d3.select(".groupListGroup_" + d.group)
+      .classed("active", true)
+      .style("border-left", "7px solid " + getGroupColor(d.group))
+
+    if(isCity){
+      d3.select("#tooltipTitle").text(d.city + ", " + d.state)
+      d3.select("#subtitleGroupName").text(groupNames[d.group])
+      d3.select("#tooltipSubtitle").style("display", "block")
+      d3.select("#tooltipViewMore").text("View city metrics")
+    }else{
+      d3.select("#tooltipTitle").text(groupNames[d.group])
+      d3.select("#tooltipSubtitle").style("display", "none")
+      d3.select("#tooltipViewMore").text("View metrics")
+    }
+    d3.select("#tooltipContainer")
+      .style("border-left", "10px solid " + getGroupColor(d.group))
+    var subset = cities.filter(function(o){ return o.group == d.group })
+    alphaSort(subset)
+    var cols;
+    if(IS_PHONE()){ cols = 2}
+    else if(IS_MOBILE()){ cols = 3}
+    else{ cols = 4 }
+    d3.selectAll("#tooltipCitiesList .col").remove()
+    
+    var n = Math.ceil(subset.length/cols)
+    for(var i = 0; i < cols; i++){
+      var col = d3.select("#tooltipCitiesList")
+        .append("div")
+        .attr("class", "col")
+        .style("width", 100/cols + "%")
+      for(var j = 0; j < n; j++){
+        if(typeof(subset[i*n + j]) != "undefined"){
+          col.append("div")
+            .attr("class", "tooltipCity")
+            .text(subset[i*n + j]["city"] + ", " + subset[i*n + j]["state"])
+        }else{
+          col.append("div")
+            .attr("class", "tooltipCity")
+            .text("a")
+            .style("opacity",0)
+        }
+      }
+    }
+  }
 }
 
-function mouseout(){
-  d3.selectAll("circle")
-    .transition()
-    .attr("r", DESKTOP_RADIUS)
-    .style("opacity",1)
-  d3.selectAll(".cityText")
-    .transition()
-    .style("opacity", 0)
+function mouseout(cities){
+    d3.selectAll("circle")
+      .transition()
+      .attr("r", DESKTOP_RADIUS)
+      .style("opacity",1)
+    d3.selectAll(".cityText")
+      .transition()
+      .style("opacity", 0)
+    if(d3.selectAll("circle.clicked").nodes().length != 0){
+      var d = d3.select("circle.clicked").datum()
+      highlight(d, true, "click", cities)
+    }
+    else if(d3.selectAll(".groupListGroup.clicked").nodes().length != 0){
+      var d = d3.select(".groupListGroup.clicked").datum()
+      highlight(d, false, "click", cities)     
+    }
 }
+
+function showCityMenu(cities){
+  hideMenu();
+  if(d3.select(".city.menu.popup").node() != null){
+    return false;
+  }
+  alphaSort(cities)
+  var menu = d3.select("body")
+    .append("div")
+    .attr("class", "city menu popup")
+    .on("mouseleave", hideMenu)
+  var container = menu.append("div")
+    .attr("class", "colContainer")
+  
+  var columns = (IS_MOBILE()) ? 3 : 5;
+
+  for(var i = 0; i < columns; i++){
+    var col = container.append("div")
+      .attr("class", "popupColumn popupColumn_" + (i+1))
+    for(var j = i*(60/columns); j < (i+1)*60/columns; j++){
+      col.append("div")
+        .attr("class", "popupCity")
+        .text(cities[j]["city"] + ", " + cities[j]["state"])
+        // .attr("href")
+    }
+  }
+}
+
+function showGroupMenu(){
+  hideMenu();
+  if(d3.select(".group.menu.popup").node() != null){
+    return false;
+  }
+  var menu = d3.select("body")
+    .append("div")
+    .attr("class", "group menu popup")
+    .on("mouseleave", hideMenu)
+  var container = menu.append("div")
+    .attr("class", "colContainer")
+  
+  var columns = (IS_MOBILE()) ? 2 : 3;
+
+  for(var r = 0; r < Math.ceil(9/columns); r++){
+    var row = container.append("div")
+      .attr("class", function(){
+        var suffix;
+        if(r == 0 ){ suffix = "first"}
+        else if(r == Math.ceil(9/columns) - 1){ suffix = "last"}
+        else{ suffix = (r+1) }
+        return "popupRow popupRow_" + suffix
+      })
+    for(var i = 0; i<columns; i++){
+      row.append("div")
+        .attr("class", "popupGroup")
+        .text(groupNames[r*columns+i+1])
+        .style("border-left", "10px solid " + getGroupColor(r*columns+i+1))
+    }
+  }
+}
+
+function hideMenu(){
+  d3.selectAll(".menu.popup").remove() 
+}
+
 
 d3.json("data/map.json", function(error, us) {
   d3.tsv("data/cities.tsv")
     .row(typeCities)
     .get(function(error, cities){
+
+      buildTooltip(cities)
+
       drawMap("homeMap", us, cities)
+      
       d3.select(window)
         .on("resize", function(){
           drawMap("homeMap", us, cities)
         });
+
+      d3.select(".menuTab.cities")
+        .on("mouseover", function(){ showCityMenu(cities) })
+        // .on("mouseout", hideMenu)
+      d3.select(".menuTab.home")
+        .on("mouseover", hideMenu)
+      d3.select(".menuTab.groups")
+        .on("mouseover", showGroupMenu)
   })
 })
 
