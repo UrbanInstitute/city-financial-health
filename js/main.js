@@ -177,8 +177,47 @@ function typeCities(d){
   d.slug = d.slug;
   d.city = d.city;
   d.state = d.state;
+  d["credit-overall"] = +d["credit-overall"];
+  d["credit-non-white"] = +d["credit-non-white"];
+  d["credit-white"] = +d["credit-white"];
+  d["debt-percent"] = +d["debt-percent"];
+  d["debt-amount"] = +d["debt-amount"];
+  d["foreclosure"] = +d["foreclosure"];
+  d["cost-burdened"] = +d["cost-burdened"];
+  d["eitc"] = +d["eitc"];
+  d["unbanked"] = +d["unbanked"];
+  d["health-insured"] = +d["health-insured"];
+  d["health-uninsured"] = +d["health-uninsured"];
+  d["low-income"] = +d["low-income"];
+  d["unemployment"] = +d["unemployment"];
+  d["labor-force-participation"] = +d["labor-force-participation"];
+  d["gini"] = +d["gini"];
+  d["pop-change"] = +d["pop-change"];
+
   return d;
 }
+function typeGroups(d){
+  d.group = +d.group;
+  d["credit-overall"] = +d["credit-overall"];
+  d["credit-non-white"] = +d["credit-non-white"];
+  d["credit-white"] = +d["credit-white"];
+  d["debt-percent"] = +d["debt-percent"];
+  d["debt-amount"] = +d["debt-amount"];
+  d["foreclosure"] = +d["foreclosure"];
+  d["cost-burdened"] = +d["cost-burdened"];
+  d["eitc"] = +d["eitc"];
+  d["unbanked"] = +d["unbanked"];
+  d["health-insured"] = +d["health-insured"];
+  d["health-uninsured"] = +d["health-uninsured"];
+  d["low-income"] = +d["low-income"];
+  d["unemployment"] = +d["unemployment"];
+  d["labor-force-participation"] = +d["labor-force-participation"];
+  d["gini"] = +d["gini"];
+  d["pop-change"] = +d["pop-change"];
+
+  return d;
+}
+
 
 function buildGroupContent(groups){
   var group = getPeerGroup();
@@ -217,8 +256,40 @@ function buildBottomContent(groups){
 
 }
 
-function buildCharts(cities){
-  var metrics = [["credit-overall","Median credit score"],["credit-white","Credit score, white areas"],["credit-non-white","Credit score, nonwhite areas"],["debt-percent","Delinquent debt"],["debt-amount","Median delinquent debt"],["foreclosure","Home foreclosure"],["cost-burdened","Housing-cost burdened, low-income"],["unbanked","Unbanked, metro area"],["health-insured","Health insurance coverage"],["eitc","Received EITC, low-income"],["unemployment","Unemployment rate"],["labor-force-participation","Labor force participation rate"],["low-income","Below 200% of federal poverty level"],["pop-change","Population change, 2000–15"],["gini","Gini index of income inequality"]]
+function buildCharts(cities, groups){
+  var metrics = [["credit-overall","Median credit score",800,"int"],["credit-white","Credit score, white areas",800,"int"],["credit-non-white","Credit score, nonwhite areas",800,"int"],["debt-percent","Delinquent debt",.7,"percent0"],["debt-amount","Median delinquent debt",2400,"dollars"],["foreclosure","Home foreclosure",.025,"percent2"],["cost-burdened","Housing-cost burdened, low-income",.85,"percent0"],["unbanked","Unbanked, metro area",.18,"percent1"],["health-insured","Health insurance coverage",.28,"percent0"],["eitc","Received EITC, low-income",.55,"percent0"],["unemployment","Unemployment rate",.21,"percent1"],["labor-force-participation","Labor force participation rate",.76,"percent0"],["low-income","Below 200% of federal poverty level",.66,"percent0"],["pop-change","Population change, 2000–15",.53,"percent0"],["gini","Gini index of income inequality",.58,"gini"]]
+
+  function format(val, formatter){
+    if(formatter == "int"){ return d3.format(".0f")(val) }
+    else if(formatter == "dollars"){ return d3.format("$,.0f")(val) }
+    else if(formatter == "percent0"){ return d3.format(".0%")(val) }
+    else if(formatter == "percent1"){ return d3.format(".1%")(val) }
+    else if(formatter == "percent2"){ return d3.format(".2%")(val) }
+    else if(formatter == "gini"){ return d3.format(".2f")(val) }
+  }
+
+  if(PAGE == "group"){
+    var datum = cities.filter(function(o){ return o.})
+    buildChart(metrics[0], datum)
+  }
+  function buildChart(metric, datum){
+    var metricVar = metric[0]
+    var metricName = metric[1]
+    var yMax = metric[2]
+    var formatter = metric[3]
+
+    var container = d3.select("#charts")
+      .append("div")
+      .attr("class", "smallChartContainer")
+    var svg = container.append("svg")
+      .attr("width",160)
+      .attr("height",160)
+      .append("g")
+
+      
+
+
+  }
 }
 
 function buildTooltip(cities){
@@ -472,40 +543,44 @@ d3.json("data/map.json", function(error, us) {
   d3.tsv("data/cities.tsv")
     .row(typeCities)
     .get(function(error, cities){
-      if(PAGE == "home"){
-        buildTooltip(cities)
-        buildStateSelect(cities)
-        drawMap("homeMap", us, cities)
-        
-        d3.select(window)
-          .on("resize", function(){
-            drawMap("homeMap", us, cities)
-          });
-      }else{
-        var group = cities.filter(function(o){ return o.group == getPeerGroup(cities) })
-        alphaSort(group)
-        buildGroupContent(group)
-        buildBottomContent(group)
-        buildCharts(cities)
-        if(PAGE == "group"){
-          drawMap("groupMap", us, group)
+      d3.csv("data/groups.csv")
+        .row(typeGroups)
+        .get(function(error, groups){
+        if(PAGE == "home"){
+          buildTooltip(cities)
+          buildStateSelect(cities)
+          drawMap("homeMap", us, cities)
           
           d3.select(window)
             .on("resize", function(){
-              drawMap("groupMap", us, group)
+              drawMap("homeMap", us, cities)
             });
+        }else{
+          var group = cities.filter(function(o){ return o.group == getPeerGroup(cities) })
+          alphaSort(group)
+          buildGroupContent(group)
+          buildBottomContent(group)
+          buildCharts(cities, groups)
+          if(PAGE == "group"){
+            drawMap("groupMap", us, group)
+            
+            d3.select(window)
+              .on("resize", function(){
+                drawMap("groupMap", us, group)
+              });
+          }
         }
-      }
 
 
 
 
-      d3.select(".menuTab.cities")
-        .on("mouseover", function(){ showCityMenu(cities) })
-      d3.select(".menuTab.home")
-        .on("mouseover", hideMenu)
-      d3.select(".menuTab.groups")
-        .on("mouseover", showGroupMenu)
+        d3.select(".menuTab.cities")
+          .on("mouseover", function(){ showCityMenu(cities) })
+        d3.select(".menuTab.home")
+          .on("mouseover", hideMenu)
+        d3.select(".menuTab.groups")
+          .on("mouseover", showGroupMenu)
+    })
   })
 })
 
