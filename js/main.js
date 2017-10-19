@@ -41,6 +41,21 @@ function getPeerGroup(cities){
     }
   }
 }
+function getCity(cities){
+  if(PAGE != "city"){
+    return false;
+  }else{
+    var city;
+    if(getQueryString("city") == ''){
+      city = cities[0]["slug"]
+    }else{
+      city = getQueryString("city")
+    }
+    var d = cities.filter(function(o){ return o.slug == city })[0]
+    // return [city, d.fullName, d.group]
+    return d;
+  }
+}
 function alphaSort(data){
   data.sort(function(a, b) {
     var nameA = a.city.toUpperCase(); // ignore upper and lowercase
@@ -220,12 +235,33 @@ function typeGroups(d){
 }
 
 
-function buildGroupContent(groups){
+function buildGroupContent(groups, cities){
 /************** Build title **********/
-  var group = getPeerGroup();
-  d3.select("#groupTitle")
-    .text(groupNames[group])
-    .style("border-left", "10px solid " + getGroupColor(group))
+  var group, city;
+  if(PAGE == "group"){
+    group = getPeerGroup(groups);
+  }else{
+    city = getCity(cities)  
+    group = city.group
+  }
+  
+  if(PAGE == "group"){
+    d3.select("#groupTitle")
+      .text(groupNames[group])
+      .style("border-left", "10px solid " + getGroupColor(group))
+  }else{
+    d3.select("#cityTitle")
+      .text(city.fullName)
+    var subtitle = d3.select("#groupSubtitle")
+    subtitle.append("div")
+      .attr("id","groupSubtitleText")
+      .html("is in the <span>" + groupNames[group] + "</span> peer group")
+    subtitle.append("div")
+      .attr("class", "thinButton")
+      .text("View metrics")
+    subtitle
+      .style("border-left", "10px solid " + getGroupColor(group))
+  }
 
 /************** Build highlights **********/
   var highlightUl = d3.select("#highlights").append("ul")
@@ -237,25 +273,27 @@ function buildGroupContent(groups){
       .html(highlights[i])
   }
 /************** Build map city list **********/
-  d3.select("#groupCitiesList")
-    .selectAll(".groupCity")
-    .data(groups)
-    .enter()
-    .append("div")
-    .attr("id", function(d){ return "groupCity_" + d.slug})
-    .attr("class", function(d,i){
-      if(i%2 == 0){ return "groupCity even"}
-      else{ return "groupCity odd"}
-    })
-    .text(function(d){ return d.fullName })
-    .on("mouseover", function(d){
-      d3.select("circle.city_" + d.slug).style("opacity",.5)
-      d3.select(this).style("color","#353535")
-    })
-    .on("mouseout", function(d){
-      d3.select("circle.city_" + d.slug).style("opacity",1)
-      d3.select(this).style("color","#1696d2")
-    })
+  if(PAGE == "group"){
+    d3.select("#groupCitiesList")
+      .selectAll(".groupCity")
+      .data(groups)
+      .enter()
+      .append("div")
+      .attr("id", function(d){ return "groupCity_" + d.slug})
+      .attr("class", function(d,i){
+        if(i%2 == 0){ return "groupCity even"}
+        else{ return "groupCity odd"}
+      })
+      .text(function(d){ return d.fullName })
+      .on("mouseover", function(d){
+        d3.select("circle.city_" + d.slug).style("opacity",.5)
+        d3.select(this).style("color","#353535")
+      })
+      .on("mouseout", function(d){
+        d3.select("circle.city_" + d.slug).style("opacity",1)
+        d3.select(this).style("color","#1696d2")
+      })
+  }
 /************** Build approaches **********/
   d3.select("#approachesGroupName")
     .text(groupNames[group])
@@ -269,7 +307,15 @@ function buildGroupContent(groups){
   }
 
 }
-function buildBottomContent(groups){
+function buildBottomContent(groups, cities){
+  var group, city;
+  if(PAGE == "group"){
+    group = getPeerGroup(groups);
+  }else{
+    city = getCity(cities)  
+    group = city.group
+    groups = cities.filter(function(o){ return o.group == group})
+  }
   d3.select("#bottomCitiesList")
     .selectAll(".bottomCity")
     .data(groups)
@@ -280,7 +326,6 @@ function buildBottomContent(groups){
     .text(function(d){ return d.fullName })
     .attr("href", function(d){ return "city.html?city=" + d.slug})
 
-  var group = groups[0]["group"]
   var container = d3.select("#bottomGroupsList")
 
   var columns = (IS_PHONE()) ? 1 : 2;
@@ -297,7 +342,6 @@ function buildBottomContent(groups){
     if(i == group){ continue }
     counter += 1;
     if(counter == columns){ counter = 0; rowCount += 1 }
-    console.log(counter, columns, d3.select(".bottomRow_" + rowCount).node()  )
     d3.select(".bottomRow_" + rowCount)
         .append("a")
         .attr("href", "peergroup.html?peergroup=" + (i))
@@ -310,7 +354,13 @@ function buildBottomContent(groups){
 }
 
 function buildCharts(cities, groups){
-  var group = getPeerGroup();
+  var group, city;
+  if(PAGE == "group"){
+    group = getPeerGroup(groups);
+  }else{
+    city = getCity(cities)  
+    group = city.group
+  }
   var metrics = [["credit-overall","Median credit score",800,"int"],["credit-white","Credit score, white areas",800,"int"],["credit-non-white","Credit score, nonwhite areas",800,"int"],["debt-percent","Delinquent debt",.7,"percent0"],["debt-amount","Median delinquent debt",2400,"dollars"],["foreclosure","Home foreclosure",.025,"percent2"],["cost-burdened","Housing-cost burdened, low-income",.85,"percent0"],["unbanked","Unbanked, metro area",.18,"percent1"],["health-insured","Health insurance coverage",.91,"percent0"],["eitc","Received EITC, low-income",.55,"percent0"],["unemployment","Unemployment rate",.21,"percent1"],["labor-force-participation","Labor force participation rate",.76,"percent0"],["low-income","Below 200% of federal poverty level",.66,"percent0"],["pop-change","Population change, 2000–15",.53,"percent0"],["gini","Gini index of income inequality",.58,"gini"]]
 
   function format(val, formatter){
@@ -327,6 +377,11 @@ function buildCharts(cities, groups){
     for(var i = 0; i < metrics.length; i++){
       buildChart(metrics[i], datum)  
     }
+  }else{
+    for(var i = 0; i < metrics.length; i++){
+      buildChart(metrics[i], city)  
+    }
+
   }
   function buildChart(metric, datum){
     var metricVar = metric[0]
@@ -360,6 +415,16 @@ function buildCharts(cities, groups){
       activeGroup.category = "group"
       national.category = "national"
       data = [activeGroup,national]
+    }else{
+      d3.selectAll("#chartKey .city").style("display", "inline-block")
+      d3.select(".keyLabel.city").text(city.fullName)
+      d3.select("#chartContainer").classed("city", true)
+      var activeGroup = groups.filter(function(o){ return o.group == group })[0]
+      var national = groups.filter(function(o){ return o.group == 99 })[0]
+      activeGroup.category = "group"
+      national.category = "national"
+      city.category = "city"
+      data = [activeGroup,national, city]
     }
 
     var x = d3.scaleBand().rangeRound([0, width]).padding(0.3),
@@ -689,8 +754,8 @@ d3.json("data/map.json", function(error, us) {
         }else{
           var group = cities.filter(function(o){ return o.group == getPeerGroup(cities) })
           alphaSort(group)
-          buildGroupContent(group)
-          buildBottomContent(group)
+          buildGroupContent(group, cities)
+          buildBottomContent(group, cities)
           buildCharts(cities, groups)
           if(PAGE == "group"){
             drawMap("groupMap", us, group)
