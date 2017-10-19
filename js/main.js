@@ -686,7 +686,7 @@ function showCityMenu(cities){
     for(var j = i*(60/columns); j < (i+1)*60/columns; j++){
       col.append("div")
         .append("a")
-        .attr("href", "/city.html?city=" + cities[j]["slug"])
+        .attr("href", "city.html?city=" + cities[j]["slug"])
         .attr("class", "popupCity")
         .text(cities[j]["fullName"])
         
