@@ -177,6 +177,7 @@ function typeCities(d){
   d.slug = d.slug;
   d.city = d.city;
   d.state = d.state;
+  d.fullName = d.city + ", " + d.state
   d["credit-overall"] = +d["credit-overall"];
   d["credit-non-white"] = +d["credit-non-white"];
   d["credit-white"] = +d["credit-white"];
@@ -220,10 +221,13 @@ function typeGroups(d){
 
 
 function buildGroupContent(groups){
+/************** Build title **********/
   var group = getPeerGroup();
   d3.select("#groupTitle")
     .text(groupNames[group])
     .style("border-left", "10px solid " + getGroupColor(group))
+
+/************** Build highlights **********/
   var highlightUl = d3.select("#highlights").append("ul")
     .attr("id", "highlightUl")
   var highlights = groupHighlights[group]
@@ -232,6 +236,7 @@ function buildGroupContent(groups){
       .attr("class","highlightLi")
       .html(highlights[i])
   }
+/************** Build map city list **********/
   d3.select("#groupCitiesList")
     .selectAll(".groupCity")
     .data(groups)
@@ -242,7 +247,7 @@ function buildGroupContent(groups){
       if(i%2 == 0){ return "groupCity even"}
       else{ return "groupCity odd"}
     })
-    .text(function(d){ console.log(d); return d.city + ", " + d.state})
+    .text(function(d){ return d.fullName })
     .on("mouseover", function(d){
       d3.select("circle.city_" + d.slug).style("opacity",.5)
       d3.select(this).style("color","#353535")
@@ -251,13 +256,62 @@ function buildGroupContent(groups){
       d3.select("circle.city_" + d.slug).style("opacity",1)
       d3.select(this).style("color","#1696d2")
     })
+/************** Build approaches **********/
+  d3.select("#approachesGroupName")
+    .text(groupNames[group])
+  var approachUl = d3.select("#approachesList").append("ul")
+    .attr("id", "approachUl")
+  var approaches = groupApproaches[group]
+  for(var i =0; i < approaches.length; i++){
+    approachUl.append("li")
+      .attr("class","approachLi")
+      .html(approaches[i])
+  }
+
 }
 function buildBottomContent(groups){
+  d3.select("#bottomCitiesList")
+    .selectAll(".bottomCity")
+    .data(groups)
+    .enter()
+    .append("div")
+    .attr("class","bottomCity")
+    .append("a")
+    .text(function(d){ return d.fullName })
+    .attr("href", function(d){ return "city.html?city=" + d.slug})
 
+  var group = groups[0]["group"]
+  var container = d3.select("#bottomGroupsList")
+
+  var columns = (IS_PHONE()) ? 1 : 2;
+
+  for(var r = 0; r < Math.ceil(8/columns); r++){
+    var row = container.append("div")
+      .attr("class", function(){
+        return "bottomRow bottomRow_" + (r+1)
+      })
+  }
+  var rowCount = 1;
+  var counter = -1;
+  for(var i = 1; i < 10; i++){
+    if(i == group){ continue }
+    counter += 1;
+    if(counter == columns){ counter = 0; rowCount += 1 }
+    console.log(counter, columns, d3.select(".bottomRow_" + rowCount).node()  )
+    d3.select(".bottomRow_" + rowCount)
+        .append("a")
+        .attr("href", "peergroup.html?peergroup=" + (i))
+        .append("div")
+        .attr("class", "bottomGroup")
+        .text(groupNames[i])
+        .style("border-left", "10px solid " + getGroupColor(i))
+
+  }
 }
 
 function buildCharts(cities, groups){
-  var metrics = [["credit-overall","Median credit score",800,"int"],["credit-white","Credit score, white areas",800,"int"],["credit-non-white","Credit score, nonwhite areas",800,"int"],["debt-percent","Delinquent debt",.7,"percent0"],["debt-amount","Median delinquent debt",2400,"dollars"],["foreclosure","Home foreclosure",.025,"percent2"],["cost-burdened","Housing-cost burdened, low-income",.85,"percent0"],["unbanked","Unbanked, metro area",.18,"percent1"],["health-insured","Health insurance coverage",.28,"percent0"],["eitc","Received EITC, low-income",.55,"percent0"],["unemployment","Unemployment rate",.21,"percent1"],["labor-force-participation","Labor force participation rate",.76,"percent0"],["low-income","Below 200% of federal poverty level",.66,"percent0"],["pop-change","Population change, 2000–15",.53,"percent0"],["gini","Gini index of income inequality",.58,"gini"]]
+  var group = getPeerGroup();
+  var metrics = [["credit-overall","Median credit score",800,"int"],["credit-white","Credit score, white areas",800,"int"],["credit-non-white","Credit score, nonwhite areas",800,"int"],["debt-percent","Delinquent debt",.7,"percent0"],["debt-amount","Median delinquent debt",2400,"dollars"],["foreclosure","Home foreclosure",.025,"percent2"],["cost-burdened","Housing-cost burdened, low-income",.85,"percent0"],["unbanked","Unbanked, metro area",.18,"percent1"],["health-insured","Health insurance coverage",.91,"percent0"],["eitc","Received EITC, low-income",.55,"percent0"],["unemployment","Unemployment rate",.21,"percent1"],["labor-force-participation","Labor force participation rate",.76,"percent0"],["low-income","Below 200% of federal poverty level",.66,"percent0"],["pop-change","Population change, 2000–15",.53,"percent0"],["gini","Gini index of income inequality",.58,"gini"]]
 
   function format(val, formatter){
     if(formatter == "int"){ return d3.format(".0f")(val) }
@@ -269,26 +323,97 @@ function buildCharts(cities, groups){
   }
 
   if(PAGE == "group"){
-    var datum = cities.filter(function(o){ return o.})
-    buildChart(metrics[0], datum)
+    var datum = null;
+    for(var i = 0; i < metrics.length; i++){
+      buildChart(metrics[i], datum)  
+    }
   }
   function buildChart(metric, datum){
     var metricVar = metric[0]
     var metricName = metric[1]
     var yMax = metric[2]
+    var yMin = (metricVar == "pop-change") ? -.35 : 0;
     var formatter = metric[3]
+
 
     var container = d3.select("#charts")
       .append("div")
       .attr("class", "smallChartContainer")
+    var W = 160
+    var H = 160
     var svg = container.append("svg")
-      .attr("width",160)
-      .attr("height",160)
-      .append("g")
+      .attr("width",W)
+      .attr("height",H)
+    container.append("div")
+      .attr("class","metricName")
+      .text(metricName)
 
-      
+    var margin = {top: 60, right: 0, bottom: 5, left: 0},
+    width = W - margin.left - margin.right,
+    height = H - margin.top - margin.bottom;
+
+    var data;
+
+    if(datum == null){
+      var activeGroup = groups.filter(function(o){ return o.group == group })[0]
+      var national = groups.filter(function(o){ return o.group == 99 })[0]
+      activeGroup.category = "group"
+      national.category = "national"
+      data = [activeGroup,national]
+    }
+
+    var x = d3.scaleBand().rangeRound([0, width]).padding(0.3),
+    y = d3.scaleLinear().rangeRound([height, 0]);
 
 
+    var g = svg.append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    x.domain(data.map(function(d) { return d.category; }));
+    y.domain([yMin, yMax]);
+
+
+
+    g.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("class", function(d){ return "bar " + d.category})
+        .attr("x", function(d) { return x(d.category); })
+        .attr("y", function(d) {
+          if(d[metricVar] < 0){ return y(0)}
+          else{ return y(d[metricVar]) ;}
+        })
+        .attr("width", x.bandwidth())
+        .attr("height", function(d) { return Math.abs(y(d[metricVar]) - y(0)); })
+
+    g.selectAll(".barLabelHide")
+      .data(data)
+      .enter().append("text")
+        .attr("class", function(d){ return "barLabelHide " + d.category})
+        .attr("x", -500)
+        .attr("y", -500)
+        .text(function(d){ return format(d[metricVar], formatter)})
+
+    g.selectAll(".barLabel")
+      .data(data)
+      .enter().append("text")
+        .attr("class", function(d){ return "barLabel " + d.category})
+        .attr("x", function(d) {
+          // var nudge = (datum == null) ? 8 : 0;
+          var bw = g.select(".barLabelHide." + d.category).node().getBoundingClientRect().width
+          var nudge = .5*(x.bandwidth() - bw)
+          return x(d.category) + nudge;
+        })
+        .attr("y", function(d) {
+          if(d[metricVar] < 0){ return y(0) + Math.abs(y(d[metricVar]) - y(0)) + 15;}
+          else{ return y(d[metricVar]) - 5; }
+        })
+        .text(function(d){ return format(d[metricVar], formatter)})
+
+    g.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + y(0) + ")")
+      .call(d3.axisBottom(x).tickSize(0));
   }
 }
 
@@ -336,7 +461,7 @@ function buildStateSelect(cities){
     .enter()
     .append("option")
       .attr("value", function(d){ return d.slug})
-      .text(function(d){ return d.city + ", " + d.state})
+      .text(function(d){ return d.fullName })
   $("#stateSelect" ).selectmenu({
     change: function(event, d){
       var slug = d.item.value
@@ -409,7 +534,7 @@ function highlight(datum, isCity, action, cities){
       .style("border-left", "7px solid " + getGroupColor(d.group))
 
     if(isCity){
-      d3.select("#tooltipTitle").text(d.city + ", " + d.state)
+      d3.select("#tooltipTitle").text(d.fullName)
       d3.select("#subtitleGroupName").text(groupNames[d.group])
       d3.select("#tooltipSubtitle").style("display", "block")
       d3.select("#tooltipViewMore").text("View city metrics")
@@ -438,7 +563,7 @@ function highlight(datum, isCity, action, cities){
         if(typeof(subset[i*n + j]) != "undefined"){
           col.append("div")
             .attr("class", "tooltipCity")
-            .text(subset[i*n + j]["city"] + ", " + subset[i*n + j]["state"])
+            .text(subset[i*n + j]["fullName"])
         }else{
           col.append("div")
             .attr("class", "tooltipCity")
@@ -495,9 +620,11 @@ function showCityMenu(cities){
       .attr("class", "popupColumn popupColumn_" + (i+1))
     for(var j = i*(60/columns); j < (i+1)*60/columns; j++){
       col.append("div")
+        .append("a")
+        .attr("href", "/city.html?city=" + cities[j]["slug"])
         .attr("class", "popupCity")
-        .text(cities[j]["city"] + ", " + cities[j]["state"])
-        // .attr("href")
+        .text(cities[j]["fullName"])
+        
     }
   }
 }
@@ -526,10 +653,14 @@ function showGroupMenu(){
         return "popupRow popupRow_" + suffix
       })
     for(var i = 0; i<columns; i++){
-      row.append("div")
+      row
+        .append("a")
+        .attr("href", "peergroup.html?peergroup=" + (r*columns+i+1))
+        .append("div")
         .attr("class", "popupGroup")
         .text(groupNames[r*columns+i+1])
         .style("border-left", "10px solid " + getGroupColor(r*columns+i+1))
+        
     }
   }
 }
