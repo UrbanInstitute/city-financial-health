@@ -14,6 +14,13 @@ body{
 	display: inline-block;
 	cursor: pointer;
 }
+.thinButton a, .thicButton a{
+	color: #fff;
+	text-decoration: none;
+}
+.thinButton:hover, .thicButton:hover{
+	background-color: #353535;
+}
 .thicButton{
 	padding: 13px 20px 13px 20px;
 	background-color: #1696d2;
@@ -24,12 +31,19 @@ body{
 	margin-top: 20px;
 	margin-bottom: 50px;
 }
-a{
+a.standard{
 	color: #1696d2;
 	text-decoration: none;
 }
-a:hover{
+a.standard:hover{
 	color: #353535;
+}
+a.inverted{
+	color: #353535;
+	text-decoration: none;
+}
+a.inverted:hover{
+	color: #1696d2;
 }
 
 /*********************************************************************************/
@@ -46,10 +60,11 @@ a:hover{
 }
 
 #tabWrapper{
-	width: 340px;
+	width: 310px;
     display: block;
     margin: 0 auto;
     cursor: pointer;
+    background: none;
 }
 #tabWrapper span{
 	display: inline-block;
@@ -59,13 +74,15 @@ a:hover{
     position: absolute;
     top: 14px;
     height: 18px;
+    float: left;
 }
 
 .menuTab{
 	display: inline-block;
     text-transform: uppercase;
-    font-size: 20px;
-    margin-top: 10px;
+	font-size:14px;
+	margin-top:14px;
+	float: left;
 }
 .menuTab.active, .menuTab:hover{
 	font-weight: bold;
@@ -82,7 +99,7 @@ a:hover{
 }
 .menuTab.groups{
 	float: right;
-    width: 156px;
+    width: 126px;
     text-align: right;
 }
 
@@ -102,14 +119,6 @@ a:hover{
 	box-shadow: 0px 16px 31px -11px rgba(105,105,105,0.62);
 	z-index: 9999;
 }
-.menu.popup a{
-	text-decoration: none;
-	color: #353535;
-}
-.menu.popup a:hover{
-	text-decoration: none;
-	color: #1696d2;
-}
 .menu.popup:after, .menu.popup:before {
 	bottom: 100%;
 	border: solid transparent;
@@ -120,7 +129,7 @@ a:hover{
 	pointer-events: none;
 }
 .city.menu.popup:after, .city.menu.popup:before{
-	left: calc(50% - 40px);
+	left: calc(50% - 28px);
 }
 .group.menu.popup:after, .group.menu.popup:before{
 	left: calc(50% + 110px);
@@ -225,7 +234,6 @@ a:hover{
 }
 #groupListTitle{
 	font-size: 20px;
-	color: #353535;
 	text-transform: uppercase;
 	margin-top: 50px;
 	margin-bottom: 30px;
@@ -261,25 +269,28 @@ a:hover{
 }
 #tooltipTitle{
 	font-size: 20px;
-    margin-bottom: 7px;
+    margin-bottom: 10px;
     font-weight: bold;
 }
 #tooltipSubtitle{
+	line-height: 1.4;
 	font-size: 16px;
-	color: #353535;
 	width: 470px;
 }
 #subtitleGroupName{
 	font-weight: bold;
 }
 #subtitleViewMore{
-	font-weight: bold;
 	color: #1696d2;
 	cursor: pointer;
 }
 #tooltipViewMore{
-	margin-top: 12px;
+	margin-top: 8px;
 	margin-bottom: 22px;
+}
+#tooltipViewMore .thinbutton {
+	margin-top: 0px;
+	margin-bottom: 30px;
 }
 #tooltipCities{
 	width: 470px;
@@ -287,11 +298,10 @@ a:hover{
 #tooltipCitiesTitle{
     font-size: 16px;
     font-style: italic;
-    color: #353535;
 }
 #tooltipCitiesList .col{
 	display: inline-block;
-	margin-top: 8px;
+	margin-top: 5px;
 }
 #tooltipCitiesList .tooltipCity{
 	font-size: 13px;
@@ -315,6 +325,19 @@ a:hover{
 }
 #stateSelect{
 	display: none;
+}
+#clearSelection{
+	font-size: 14px;
+    font-style: italic;
+    top: 60px;
+    right: 2px;
+    position: relative;
+    text-align: right;
+    cursor: pointer;
+    opacity: 0;
+}
+#clearSelection:hover{
+	color: #1696d2;
 }
 
 /*********************************************************************************/
@@ -366,12 +389,10 @@ a:hover{
 .copyHeader{
 	font-size: 20px;
 	font-weight: bold;
-	color: #353535;
 	margin-bottom: 35px;
 }
 .copyP, .copyUl{
     font-size: 16px;
-    color: #353535;
     line-height: 26px;
     margin-bottom: 22px;
 }
@@ -412,7 +433,11 @@ a:hover{
 .footerAbout, .footerCredits, .footerSpecialCredit{
     font-size: 16px;
     line-height: 26px;
-    color: #353535;
+}
+.footerCredits, .footerSpecialCredit{
+	font-size: 14px;
+	font-style: italic;
+	line-height: 22px;
 }
 .footerSpecialCredit, #bottomFooterCredits{
 	margin-top: 45px;
@@ -423,14 +448,12 @@ a:hover{
 .creditsHeader{
 	font-size: 16px;
 	font-weight: bold;
-	color: #353535;
 	text-transform: uppercase;
 }
 .creditsNames{
 	margin-bottom: 30px;
 	margin-top: 5px;
 	font-size: 16px;
-	color: #353535;
 }
 #copyright{
 	margin-bottom: 100px;
@@ -559,6 +582,7 @@ a:hover{
 }
 .metricName{
 	font-size: 14px;
+	font-weight: bold;
 	width: 160px;
 	position: absolute;
 	top: 140px;
@@ -673,7 +697,6 @@ a:hover{
     padding-right: 20px;
     margin-bottom: 15px;
     font-size: 18px;
-    color: #353535;
 }
 .bottomRow{
 	border-bottom: 1px solid #9D9D9D;
@@ -685,9 +708,6 @@ a:hover{
 	margin-bottom: 30px;
 	font-size: 20px;
 	text-transform: uppercase;
-}
-.bottomTitle:hover{
-	color: #353535;
 }
 .bottomRow_4{
 	margin-bottom: -40px;

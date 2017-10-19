@@ -705,7 +705,7 @@ button.ui-button::-moz-focus-inner {
 	display: block;
 }
 .ui-selectmenu-text {
-	font-size: 20px;
+	font-size: 16px;
     color: #696969;
     top: 5px;
     position: relative;
@@ -716,7 +716,7 @@ button.ui-button::-moz-focus-inner {
 	width: 190px;
 	text-overflow: ellipsis;
 	font-family: Lato;
-	margin-top: 4px;
+	margin-top: 7px;
 }
 .ui-selectmenu-button.ui-button {
 	text-align: left;
@@ -727,7 +727,6 @@ button.ui-button::-moz-focus-inner {
    	background-size: 44px 44px;
 	border: 1px solid #D2D2D2;   	
    	/*width: 45px;*/
-
 }
 .ui-selectmenu-icon.ui-icon {
 	float: right;
@@ -997,8 +996,8 @@ a.ui-button:active,
 	font-weight: normal;
 	color: #ffffff;
 }
-.ui-button:active{
-   	background: url(../../img/dropdown-bg.png) no-repeat right #d2d2d2;
+.ui-button:active, .ui-button.active{
+   	background: url(../../img/dropdown-bg-active.png) no-repeat right #ffffff;
    	background-size: 44px 44px;
 }
 .ui-icon-background,

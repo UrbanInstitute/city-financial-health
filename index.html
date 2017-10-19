@@ -64,7 +64,7 @@
   <!-- START MENU -->
   <div id = "menuBar">
     <div id = "tabWrapper">
-      <div class = "menuTab home active">Home</div>
+       <a class = "inverted" href = "index.html"><div class = "menuTab home active">Home</div></a>
       <span></span>
       <div class = "menuTab cities">Cities</div>
       <span></span>
@@ -94,15 +94,18 @@
       <div id = "mapContainer">
         <div id = "tooltipContainer">
           <div id = "tooltipTitle"></div>
-          <div id = "tooltipSubtitle">Is in the <span id = "subtitleGroupName"></span> peer group. <span id = "subtitleViewMore" href = "">View peer group metrics &gt;&gt;</span></div>
-          <div class = "thinButton" id = "tooltipViewMore" href = ""></div>
+          <div id = "tooltipSubtitle">Is in the <span id = "subtitleGroupName"><a class="inverted"></a></span> peer group. <span id = "subtitleViewMore"><a class = "standard">View peer group metrics &gt;&gt;</a></span></div>
+          <div class = "thinButton" id = "tooltipViewMore"><a></a></div>
           <div id = "tooltipCities">
             <div id = "tooltipCitiesTitle">Cities in this peer group</div>
             <div id = "tooltipCitiesList"></div>
           </div>
         </div>
         <div id = "stateSelectContainer">
-          <select id = "stateSelect"></select>
+          <select id = "stateSelect">
+            <option value = "default">Select a state</option>
+          </select>
+          <div id = "clearSelection">Clear selection</div>
         </div>
         <div id = "homeMap"></div>
       </div>
