@@ -36,7 +36,7 @@ function getPeerGroup(cities){
     if(getQueryString("city") == ''){ return 1 }
     else{
       var city = getQueryString("city")
-      var d = cities.filter(function(o){ return o.slug == city})
+      var d = cities.filter(function(o){ return o.slug == city})[0]
       return d.group
     }
   }
@@ -259,7 +259,16 @@ function buildGroupContent(groups, cities){
     city = getCity(cities)  
     group = city.group
   }
-  
+  if(PRINT){
+    var groupText = "Cities in this peer group:"
+    for(var i = 0; i<groups.length; i++){
+      groupText += " " + groups[i].fullName
+      if(i == groups.length -1){ groupText += "."}
+      else{ groupText += ";"}
+    }
+    d3.select("#printCityList")
+      .text(groupText)
+  }
   if(PAGE == "group"){
     d3.select("#groupTitle")
       .text(groupNames[group])
@@ -290,7 +299,7 @@ function buildGroupContent(groups, cities){
       .html(highlights[i])
   }
 /************** Build map city list **********/
-  if(PAGE == "group"){
+  if(PAGE == "group" || PRINT ){
     d3.select("#groupCitiesList")
       .selectAll(".groupCity")
       .data(groups)
@@ -399,12 +408,24 @@ function buildCharts(cities, groups){
     for(var i = 0; i < metrics.length; i++){
       buildChart(metrics[i], datum)  
     }
+    d3.select("#printButton")
+      .append("a")
+      .attr("href", "print_peergroup.html?peergroup=" + group)
+      .attr("target","_blank")
+      .text("Print")
   }else{
     for(var i = 0; i < metrics.length; i++){
       buildChart(metrics[i], city)  
     }
-
+    d3.select("#printButton")
+      .append("a")
+      .attr("href", "print_city.html?city=" + city.slug)
+      .attr("target","_blank")
+      .text("Print")
   }
+        // <div id = "printButton" class = "thicButton">Print</div>
+      // <div id = "dataButton" class = "thicButton"><a href = "data/download/financial-health-of-residents-data.xlsx">Download data</a></div>
+
   function buildChart(metric, datum){
     var metricVar = metric[0]
     var metricName = metric[1]
@@ -416,8 +437,8 @@ function buildCharts(cities, groups){
     var container = d3.select("#charts")
       .append("div")
       .attr("class", "smallChartContainer")
-    var W = 160
-    var H = 160
+    var W = (PRINT) ? 130 : 160;
+    var H = (PRINT) ? 130 : 160;
     var svg = container.append("svg")
       .attr("width",W)
       .attr("height",H)
@@ -857,15 +878,19 @@ d3.json("data/map.json", function(error, us) {
           var group = cities.filter(function(o){ return o.group == getPeerGroup(cities) })
           alphaSort(group)
           buildGroupContent(group, cities)
-          buildBottomContent(group, cities)
+          if(PRINT == false){ buildBottomContent(group, cities) }
           buildCharts(cities, groups)
-          if(PAGE == "group"){
+          if(PAGE == "group" && PRINT == false){
             drawMap("groupMap", us, group)
             
             d3.select(window)
               .on("resize", function(){
                 drawMap("groupMap", us, group)
               });
+          }
+          else if(PRINT == true){
+
+            drawMap("printMap", us, group)
           }
         }
 

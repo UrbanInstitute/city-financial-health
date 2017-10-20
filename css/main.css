@@ -734,3 +734,186 @@ a.inverted:hover{
 	top: 18px;
     position: relative;
 }
+
+/*********************************************************************************/
+/*****************************       PRINT      **********************************/
+/*********************************************************************************/
+.print.cover{
+/*	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;*/
+}
+.print.page{
+	height: 320mm;
+	position: relative;
+}
+.print.container, body.print #mainContent, body.print #approachesContainer{
+	width: 220mm;
+	overflow: hidden;
+}
+body.print #title, body.print #subtitle{
+	display: inline-block;
+	font-size: 28px;
+	width: auto;
+	margin-bottom: 10px;
+	margin-top: 15px;
+}
+body.print .introText {
+    font-size: 16px;
+    line-height: 21px;
+    text-align: left;
+}
+body.print #titleContainer{
+	padding-bottom: 20px;
+}
+body.print #cityTitle, body.print #groupTitle{
+	font-size: 28px;
+}
+body.print #highlightsContainer{
+	margin-top: 30px;
+}
+body.print #groupTitle{
+	font-size: 22px;
+	margin-bottom: 13px;
+}
+body.print.city #cityTitle{
+	margin-bottom: 10px;
+}
+body.print.city #groupSubtitle{
+	font-size: 18px;
+	margin-bottom: 7px;
+	padding-bottom: 3px;
+}
+#printCityList{
+	font-size: 14px;
+    margin-bottom: 20px;
+}
+body.print #chartContainer {
+    margin-top: 53px;
+}
+body.print .highlightLi {
+    font-size: 14px;
+    line-height: 18px;
+    padding-left: 8px;
+    margin-bottom: 17px;
+}
+body.print .keyItem{
+	width: 0px;
+	height: 0px;
+}
+body.print .keyItem.city{
+	border: 10px solid #1696d2;
+	display: none;
+}
+body.print .keyItem.group{
+	border: 10px solid  #D2D2D2;
+}
+body.print .keyItem.national{
+	border: 10px solid  #000000;
+}
+body.print .smallChartContainer{
+	margin-bottom: 10px;
+	height: 130px;
+}
+body.print #chartContainer{
+	width: 820px;
+	border-bottom: none;
+}
+body.print #charts{
+	height: 440px;
+}
+body.print #chartContainer{
+	height: 510px;
+}
+body.print .barLabel, body.print .barLabelHide{
+	font-size: 12px;
+}
+body.print .metricName{
+	font-size: 13px;
+	width: 130px;
+	top: 110px;
+}
+
+body.print #chartSource{
+	margin-top: 15px;
+}
+.thin.logo img{
+	height: 14px;
+    margin-top: 30px;
+    position: absolute;
+    bottom: 0px;
+}
+
+
+body.print #approachesInnerContainer{
+	width: 100%;
+}
+body.print #approachesContainer{
+	margin-top: 10px;
+	border-bottom: none;
+}
+body.print .approachesIntro, body.print #approachesList, body.print .approachLi, body.print .approachLi ul li{
+	font-size: 14px;
+	line-height: 19px;
+}
+body.print .approachLi{
+	margin-bottom: 17px;
+}
+body.print .approachLi ul li{
+	margin-bottom: 10px;
+}
+body.print #groupCitiesTitle{
+	margin-bottom: 10px;
+}
+body.print .groupCity{
+	color: #353535;
+}
+
+#printFooter{
+	position: absolute;
+    bottom: 0px;
+    border-top: 1px solid #959595;
+}
+#printFooter .full.logo{
+	float: left;
+    padding-top: 30px;
+}
+#printNotes{
+	float: left;
+    width: calc(100% - 240px);
+    margin-top: 20px;
+    padding-left: 90px;
+    text-align: left;
+    font-size: 11px;
+}
+
+.full.logo.top{
+	margin-top: 10px;
+}
+.full.logo img{
+	width: 144px;
+}
+body.print .thinButton{
+	display: none;
+}
+a.print{
+	text-decoration: none;
+	color: #1696d2;
+}
+@media print{
+  @page {
+    size: 210mm 297mm; /* portrait 
+    /* you can also specify margins here: */
+    margin: 15mm;	
+   /*margin-right: 45mm;  for compatibility with both A4 and Letter */
+  }
+   a.print:after{
+   	content:" (" attr(href) ") ";
+   	font-weight:normal;
+   	font-style: italic;
+   }
+   .page-break { height:0; page-break-after:always; margin:0; border-top:none; }
+}
+

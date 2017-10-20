@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="description" content="DESC GOES HERE">
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <title></title>
+
+        <!--social metas-->  
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@urbaninstitute">
+        <meta name="twitter:creator" content="@urbaninstitute">
+        <meta name="twitter:title" content="The People's Sector: A Look at Nonprofit Gains and Losses">
+        <meta name="twitter:description" content="The nonprofit sector is diverse and local context matters. Urban’s interactive tool lets you slice data by city, state, and nonprofit type.">
+        <meta name="twitter:image" content="http://apps.urban.org/features/nonprofit-gains-and-losses/images/social.jpg">
+        <meta property="og:title" content="The People's Sector: A Look at Nonprofit Gains and Losses" />
+        <meta property="og:description" content="The nonprofit sector is diverse and local context matters. Urban’s interactive tool lets you slice data by city, state, and nonprofit type." />
+        <meta property="og:image" content="http://apps.urban.org/features/nonprofit-gains-and-losses/images/social.jpg" />
+        <meta property="og:image:type" content="image/jpeg">
+        <meta property="og:url" content="http://urbn.is/nonprofits">
+
+        <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic,900" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="css/vendor/jquery-ui.css">
+</head>
+<body class = "print group">
+  <div class = "print cover"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class = "print container">
+  <!-- START PAGE 1 -->      
+    <div class =  "print page">
+
+      <div class = "full logo top">
+        <img src = "img/print-logo-full.png"/>
+      </div>
+
+
+      <!-- TITLE BLOCK -->
+      <div id = "titleContainer">
+        <div id = "title">Financial Health of Residents:</div>
+        <div id = "subtitle">A City-Level Dashboard</div>
+
+        <p class = "introText">The financial health of cities is closely intertwined with that of its residents. Financially healthy residents are better able to weather difficult times, are less likely to need city supports and services, and can contribute more to the local economy by supporting property, sales, and income taxes.</p>
+        <p class = "introText">Our data dashboard provides a snapshot of residents’ financial health, including unique credit bureau data, to tell the story of each city’s financial health. While recognizing that every city is different and its residents’ needs diverse, we construct city peer groups to highlight shared challenges and promising interventions. What’s your city’s picture of financial health?</p>
+      </div>
+      <!-- END TITLE BLOCK -->
+
+      <!-- HIGHLIGHTS BLOCK -->
+      <div id = "highlightsContainer">
+        <div id = "groupTitle"></div>
+        <div id = "printCityList"></div>
+        <div id = "highlights"></div>
+      </div>
+
+      <!-- END HIGHLIGHTS BLOCK -->
+
+      <!-- CHART BLOCK -->
+      <div id = "chartContainer">
+        <div id = "chartKey">
+          <div class = "keyItem city"></div>
+          <div class = "keyLabel city"></div>
+          <div class = "keyItem group"></div>
+          <div class = "keyLabel group">Peer group average</div>
+          <div class = "keyItem national"></div>
+          <div class = "keyLabel national">National average</div>
+        </div>
+        <div id = "charts"></div>
+        <div id = "chartSource"><span>Sources:</span> Urban Institute tabulation of data from a major credit bureau, the US Census Bureau, and other sources. See apps.urban.org/features/city-financial-health for more information. </div>
+        <div id = "chartNote"><span>Note:</span> EITC = earned income tax credit.</div>
+      </div>
+      <!-- END CHART BLOCK -->
+
+      <div class = "thin logo">
+        <img src = "img/print-logo-thin.png"/>
+      </div>
+      <div class = "page-break"></div>
+    </div>
+      <!-- END PAGE 1 -->      
+      <!-- START PAGE 2 -->   
+
+    <div class = "print page">
+      <!-- START APPROACHES BLOCK -->
+      <div id  = "approachesContainer">
+        <div id = "approachesInnerContainer">
+          <div id = "approachesTitle">Approaches cities can take</div>
+          <div class = "approachesIntro">Cities can take a variety of steps to improve their residents’ financial health. Strategies from workforce development to affordable housing are critical tools in this effort and can be enhanced alongside programs and policies that focus more directly on residents’ financial health.</div>
+          <div class = "approachesIntro">The following approaches are targeted to the needs, strengths, and challenges of this peer group. Residents’ needs are diverse and cities can tailor these broad strategies to their own local settings. Strategies targeted to other peer groups may still be useful for all cities. For the full list, please see our technical appendix.</div>
+          <div id = "approachesGroupName"></div>
+          <div id = "approachesList">
+          </div>
+        </div>
+      </div>
+      <!-- END APPROACHES BLOCK -->
+      <!-- START MAP BLOCK -->
+      <div id = "controlsContainer">
+        <div id = "groupCitiesListContainer">
+          <div id = "groupCitiesTitle">Cities in this peer group</div>
+          <div id = "groupCitiesList"></div>
+        </div>
+        <div id = "mapContainer">
+          <div id = "printMap"></div>
+        </div>
+      </div>
+      <!-- END MAP BLOCK -->
+
+      <!-- PRINT FOOTER -->
+      <div id = "printFooter">
+        <div class = "full logo print">
+          <img src = "img/print-logo-full.png"/>
+        </div>
+        <div id = "printNotes">
+          <p>For more information, visit apps.urban.org/features/city-financial-health or contact externalaffairs@urban.org. Special thanks to our advisory group members—Heidi Goldberg, <a class = "print" href = "http://www.nlc.org/">National League of Cities</a>; Tamara Lindsay, Cities for Financial Empowerment Fund; Solana Rice, Prosperity Now; Anne Romatowski, JPMorgan Chase; and Sarah Treuhaft, PolicyLink—many of whom work with cities to implement strategies like those recommended here. This project was funded by a grant from JPMorgan Chase. The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts.</p>
+
+          <p>Copyright © November 2017. Urban Institute.</p>
+        </div>
+      </div>
+    </div>
+    <!-- END PRINT FOOTER -->
+    <!-- END PAGE 2 -->  
+  </div>    
+
+
+
+
+
+  <script src="js/vendor/d3.v4.min.js"></script>
+  <script src="js/vendor/topojson.v2.min.js"></script>
+  <script src="js/vendor/jquery.1.8.min.js"></script>
+  <script src="js/vendor/jquery-ui.min.js"></script>
+  <script src = "data/text.js"></script>
+  <script>
+    var PAGE = "group";
+    var PRINT = true;
+  </script>
+  <script src = "js/main.js"></script>
+</body>
+</html>

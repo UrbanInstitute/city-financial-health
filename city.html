@@ -97,7 +97,7 @@
       <div id = "charts"></div>
       <div id = "chartSource"><span>Sources:</span> Urban Institute tabulation of data from a major credit bureau, the US Census Bureau, and other sources. For more information and definitions of the variables, see the technical appendix.</div>
       <div id = "chartNote"><span>Note:</span> EITC = earned income tax credit.</div>
-      <div id = "printButton" class = "thicButton">Print</div>
+      <div id = "printButton" class = "thicButton"></div>
       <div id = "dataButton" class = "thicButton"><a href = "data/download/financial-health-of-residents-data.xlsx">Download data</a></div>
     </div>
     <!-- END CHART BLOCK -->
@@ -142,7 +142,10 @@
   <script src="js/vendor/jquery.1.8.min.js"></script>
   <script src="js/vendor/jquery-ui.min.js"></script>
   <script src = "data/text.js"></script>
-  <script>var PAGE = "city"</script>
+  <script>
+    var PAGE = "city"
+    var PRINT = false;
+  </script>
   <script src = "js/main.js"></script>
 </body>
 </html>
