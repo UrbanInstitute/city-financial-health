@@ -888,10 +888,6 @@ d3.json("data/map.json", function(error, us) {
                 drawMap("groupMap", us, group)
               });
           }
-          else if(PRINT == true){
-
-            drawMap("printMap", us, group)
-          }
         }
 
 
