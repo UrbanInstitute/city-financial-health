@@ -687,7 +687,7 @@ function buildTooltip(cities){
         highlight(d, false, "hover", cities)
       })
       .on("mouseout", function(){
-        mouseout(cities)
+        mouseout(cities, true)
       })
       .on("click", function(d){
         $("#stateSelect" ).val("default").selectmenu("refresh")
@@ -701,7 +701,7 @@ function buildTooltip(cities){
         highlight(d, false, "hover", cities)
       })
       .on("mouseout", function(){
-        mouseout(cities)
+        mouseout(cities, true)
       })
       .on("click", function(d){
         highlight(d, false, "click", cities)
@@ -769,7 +769,7 @@ function buildStateSelect(cities){
 
 }
 
-function highlight(datum, isCity, action, cities){
+function highlight(datum, isCity, action, cities, isGroupList){
   var city, group;
   if(typeof(datum) == "undefined"){
     city = getCity(cities)
@@ -792,9 +792,11 @@ function highlight(datum, isCity, action, cities){
       .style("opacity", 0)
 
   if(action == "click"){
+    console.log(isGroupList)
+    var op = (isGroupList == true) ? 0 : 1;
     d3.select("#clearSelection")
       .transition()
-      .style("opacity",1)
+      .style("opacity",op)
 
     if(isCity){
       $("#stateSelect" ).val(city).selectmenu("refresh")
@@ -972,7 +974,7 @@ function highlight(datum, isCity, action, cities){
 
 }
 
-function mouseout(cities){
+function mouseout(cities, isGroupList){
     if(PAGE == "home"){
       d3.selectAll("circle")
         .transition()
@@ -987,10 +989,11 @@ function mouseout(cities){
       }
       else if(d3.selectAll(".groupListGroup.clicked").nodes().length != 0){
         var d = d3.select(".groupListGroup.clicked").datum()
-        highlight(d, false, "click", cities)     
+        var gl = (d.group == 1) ? true: false;
+        highlight(d, false, "click", cities, gl)     
       }else{
         var d = cities.filter(function(o){ return o.group == 1 })[0]
-        highlight(d, false, "click", cities)   
+        highlight(d, false, "click", cities, isGroupList)   
       }
     }
     else if(PAGE == "group"){
