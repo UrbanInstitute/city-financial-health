@@ -99,8 +99,9 @@ body{
 #header-pinned .share-icons .shareThisP {
     border-top: 0;
     border-left: 1px solid #e6e5e5;
-    height: 50px;
+    height: 41px;
     padding: 9px 0 0;
+    cursor: pointer;
 }
 
 #header-pinned .share-icons .shareThisB {
@@ -116,6 +117,7 @@ body{
     width: 32px;
     float: none;
     margin: 0 auto;
+    cursor: pointer;
 }
 
 #header-pinned .share-icons .shareThisB:hover {
@@ -138,7 +140,7 @@ body{
     background-color: #fff;
     /* border: 1px solid #e6e5e5; */
     position: absolute;
-    top: 50px;
+    top: 48px;
     left: -100px;
     padding: 5px;
     border-top: 0;
@@ -313,24 +315,6 @@ ul{
     
 }
 
-
-@media(max-width:767px) {
-.header-links ul li {
-        width:28%;
-        font:400 13px/24px Lato, sans-serif
-    }
-   
-    .tt-name, .tt-title {
-       font-size: 16px !important;
-    }
-    .feature-link{
-        display: none !important;
-    }
-    #header-pinned .title{
-        font-size: 15px !important;
-        margin-left: 55px !important;
-    }
-}
 
 .header-links a {
     color: #fff;

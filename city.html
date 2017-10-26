@@ -24,10 +24,17 @@
 
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic,900" rel="stylesheet" type="text/css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="css/responsive.css">
         <link rel="stylesheet" type="text/css" href="css/urban-header.css">
         <link rel="stylesheet" type="text/css" href="css/vendor/jquery-ui.css">
 </head>
 <body>
+<div id = "breakpoint1200"></div>
+<div id = "breakpoint1000"></div>
+<div id = "breakpoint900"></div>
+<div id = "isMobile"></div>
+<div id = "isPhone"></div>
+<div id = "isSmallPhone"></div>
 
   <!-- START HEADER -->
   <div id="header-pinned" class="no-touch">
@@ -98,7 +105,7 @@
       <div id = "chartSource"><span>Sources:</span> Urban Institute tabulation of data from a major credit bureau, the US Census Bureau, and other sources. For more information and definitions of the variables, see the technical appendix.</div>
       <div id = "chartNote"><span>Note:</span> EITC = earned income tax credit.</div>
       <div id = "printButton" class = "thicButton"></div>
-      <div id = "dataButton" class = "thicButton"><a href = "data/download/financial-health-of-residents-data.xlsx">Download data</a></div>
+      <a href = "data/download/financial-health-of-residents-data.xlsx"><div id = "dataButton" class = "thicButton">Download data</div></a>
     </div>
     <!-- END CHART BLOCK -->
 
@@ -147,5 +154,6 @@
     var PRINT = false;
   </script>
   <script src = "js/main.js"></script>
+  <script src = "js/header.js"></script>
 </body>
 </html>

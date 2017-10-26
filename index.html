@@ -24,10 +24,19 @@
 
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic,900" rel="stylesheet" type="text/css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="css/responsive.css">
         <link rel="stylesheet" type="text/css" href="css/urban-header.css">
         <link rel="stylesheet" type="text/css" href="css/vendor/jquery-ui.css">
 </head>
 <body>
+<div id = "breakpoint1200"></div>
+<div id = "breakpoint1000"></div>
+<div id = "breakpoint900"></div>
+<div id = "isMobile"></div>
+<div id = "isPhone"></div>
+<div id = "isSmallPhone"></div>
+
+
 
   <!-- START HEADER -->
   <div id="header-pinned" class="no-touch">
@@ -95,17 +104,24 @@
         <div id = "tooltipContainer">
           <div id = "tooltipTitle"></div>
           <div id = "tooltipSubtitle">Is in the <span id = "subtitleGroupName"><a class="inverted"></a></span> peer group. <span id = "subtitleViewMore"><a class = "standard">View peer group metrics &gt;&gt;</a></span></div>
-          <div class = "thinButton" id = "tooltipViewMore"><a></a></div>
+          <div class = "thinButton" id = "tooltipViewMore"></div>
           <div id = "tooltipCities">
             <div id = "tooltipCitiesTitle">Cities in this peer group</div>
             <div id = "tooltipCitiesList"></div>
           </div>
         </div>
+        <div id = "citySelectLabel">City</div>
+        <div id = "groupSelectLabel">Peer group</div>
+
         <div id = "stateSelectContainer">
           <select id = "stateSelect">
             <option value = "default">Select a state</option>
           </select>
           <div id = "clearSelection">Clear selection</div>
+        </div>
+        <div id = "groupSelectContainer">
+          <select id = "groupSelect">
+          </select>
         </div>
         <div id = "homeMap"></div>
       </div>
@@ -197,5 +213,6 @@
     var PRINT = false;
   </script>
   <script src = "js/main.js"></script>
-</body>a
+  <script src = "js/header.js"></script>
+</body>
 </html>

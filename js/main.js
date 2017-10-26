@@ -15,11 +15,29 @@ function getActiveGroup(){
 function getActiveCity(){
   return false;
 }
+function IS_1200(){
+  if(PRINT){ return false }
+  else { return d3.select("#breakpoint1200").style("display") == "block"; }
+}
+function IS_1000(){
+  if(PRINT){ return false }
+  else { return d3.select("#breakpoint1000").style("display") == "block"; }
+}
+function IS_900(){
+  if(PRINT){ return false }
+  else { return d3.select("#breakpoint900").style("display") == "block"; }
+}
 function IS_MOBILE(){
-  return false;
+  if(PRINT){ return false }
+  else { return d3.select("#isMobile").style("display") == "block"; }
 }
 function IS_PHONE(){
-  return false;
+  if(PRINT){ return false }
+  else { return d3.select("#isPhone").style("display") == "block"; }
+}
+function IS_SMALL_PHONE(){
+  if(PRINT){ return false }
+  else { return d3.select("#isSmallPhone").style("display") == "block"; }
 }
 function getGroupColor(group){
   var colors = [null,"#DB2B27","#73BFE2","#55B748","#EC008B","#1696D2","#12719E","#FDBF11","#9D9D9D", "#000000"]
@@ -132,29 +150,47 @@ function drawMap(containerID, us, cities){
     .append("text")
       .attr("class", function(d){ return "cityText city_" + d.slug + " group_" + d.group  })
       .attr("x", function(d){
-        if(d.slug == "san-francisco-ca" || d.slug == "new-york-ny" || d.slug == "columbus-oh" || d.slug == "houston-tx" || d.slug == "savannah-ga" || d.slug == "san-jose-ca" || d.slug == "" || d.slug == "" || d.slug == ""){
+        var small = IS_1200() || PRINT;
+        console.log(small)
+        if(IS_1000() && !IS_900()){
+          if(d.slug == "san-francisco-ca" || d.slug == "san-jose-ca" || d.slug == "oakland-ca" || d.slug == "sacramento-ca"){
+            return projection([d[0], d[1] ])[0] + 5 
+          }else{
+            return projection([d[0], d[1] ])[0] - d3.select(".dummyText.city_" + d.slug).node().getBoundingClientRect().width *.5  
+          }
+        }
+        else if(PRINT && (d.slug == "san-francisco-ca" || d.slug == "san-jose-ca" || d.slug == "oakland-ca" || d.slug == "sacramento-ca")){
+          return projection([d[0], d[1] ])[0] + 2
+        }
+        else if(d.slug == "san-francisco-ca" || d.slug == "new-york-ny" || d.slug == "columbus-oh" || d.slug == "houston-tx" || d.slug == "savannah-ga" || d.slug == "san-jose-ca" || d.slug == "" || d.slug == "" || d.slug == ""){
           return projection([d[0], d[1] ])[0] - 15 
         }
-        else if(d.slug == "san-antonio-tx" || d.slug == "indianapolis-in"){
+        else if(d.slug == "san-antonio-tx" || d.slug == "indianapolis-in" || (small && d.slug == "milwaukee-wi") || (small && d.slug == "shreveport-la") || (small && d.slug == "des-moines-ia") || (small && d.slug == "kansas-city-mo")){
           return projection([d[0], d[1] ])[0] - d3.select(".dummyText.city_" + d.slug).node().getBoundingClientRect().width + 15
         }
         else if(d.slug == "baton-rouge-la"){
-          return projection([d[0], d[1] ])[0] - d3.select(".dummyText.city_" + d.slug).node().getBoundingClientRect().width - 9
+          var nudge = (small) ? 4 : 9;
+          return projection([d[0], d[1] ])[0] - d3.select(".dummyText.city_" + d.slug).node().getBoundingClientRect().width - nudge
         }
         else if(d.slug == "new-orleans-la"){
           return projection([d[0], d[1] ])[0] + 13 
-        }else{
+        }
+        else{
           return projection([d[0], d[1] ])[0] - d3.select(".dummyText.city_" + d.slug).node().getBoundingClientRect().width *.5  
         }
       })
       .attr("y", function(d){
-        if(d.slug == "san-francisco-ca" || d.slug == "sacramento-ca" || d.slug == "lansing-mi" || d.slug == "indianapolis-in" || d.slug == "wilmington-de" || d.slug == "durham-nc" || d.slug == "philadelphia-pa" ||  d.slug == "birmingham-al" || d.slug == "columbia-sc" || d.slug == "jackson-ms"){
+        var small = IS_1200() || PRINT;
+        if(IS_1000() && !IS_900()){
+          return projection([d[0], d[1] ])[1] + 22;    
+        }
+        else if(d.slug == "san-francisco-ca" || d.slug == "sacramento-ca" || d.slug == "lansing-mi" || d.slug == "indianapolis-in" || d.slug == "wilmington-de" || d.slug == "durham-nc" || d.slug == "philadelphia-pa" ||  d.slug == "birmingham-al" || d.slug == "columbia-sc" || d.slug == "jackson-ms" || (small && d.slug == "milwaukee-wi") || (small && d.slug == "buffalo-ny") || (small && d.slug == "rochester-ny") || (small && d.slug == "shreveport-la")){
           return projection([d[0], d[1] ])[1] - 14;  
         }
         else if(d.slug == "new-orleans-la" || d.slug == "baton-rouge-la"){
           return projection([d[0], d[1] ])[1] + 5
         }else{
-          return projection([d[0], d[1] ])[1] + 22;  
+          return projection([d[0], d[1] ])[1] + 22;    
         }
       })
       .text(function(d){ return d.city })
@@ -188,6 +224,7 @@ function drawMap(containerID, us, cities){
       .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; });
 
   clearSelected(cities)
+  updateContentMargin()
 }
 
 function clearSelected(cities){
@@ -195,6 +232,9 @@ function clearSelected(cities){
   var init = cities.filter(function(o){ return o.group == 1 })[0]
   highlight(init, false, "click", cities)
   $("#stateSelect" ).val("default").selectmenu("refresh")
+  if(IS_900()){
+    $("#groupSelect" ).val("1").selectmenu("refresh")
+  }
   d3.select("#clearSelection")
     .transition()
     .style("opacity",0)
@@ -249,8 +289,51 @@ function typeGroups(d){
   return d;
 }
 
+function updateContentMargin(){
+  if(PRINT){
+    return false;
+  }
+  else if(PAGE == "home"){
+    var margin;
+    if(IS_PHONE()){
+      margin = 330 + d3.select("#tooltipContainer").node().getBoundingClientRect().height;
+    }
+    else if(IS_MOBILE()){
+      margin = 270 + d3.select("#tooltipContainer").node().getBoundingClientRect().height;
+    }
+    else if(IS_900()){
+      margin = 455 + d3.select("#homeMap").node().getBoundingClientRect().height;
+    }
+    else if(IS_1000() || IS_1200()){
+      margin = 737;
+    }else{
+      margin = 925;
+    }
+    d3.select("#homeCopy")
+      .style("margin-top", margin + "px")
+  }
+  else if(PAGE == "group"){
+    var margin;
+    if(IS_MOBILE()){
+      margin = 90 +  d3.select("#groupCitiesListContainer").node().getBoundingClientRect().height;
+    }
+    else if(IS_900()){
+      margin = 90 + d3.select("#groupMap").node().getBoundingClientRect().height + d3.select("#groupCitiesListContainer").node().getBoundingClientRect().height;
+    }else{
+      margin = 90 + d3.max([d3.select("#groupMap").node().getBoundingClientRect().height,d3.select("#groupCitiesListContainer").node().getBoundingClientRect().height]);
+    }
+    // else if(IS_1000() || IS_1200()){
+    //   margin = 737;
+    // }else{
+    //   margin = 925;
+    // }
+    d3.select("#chartContainer")
+      .style("margin-top", margin + "px")
+  }
+}
 
 function buildGroupContent(groups, cities){
+  d3.selectAll(".groupContent").remove()
 /************** Build title **********/
   var group, city;
   if(PAGE == "group"){
@@ -279,11 +362,11 @@ function buildGroupContent(groups, cities){
     var subtitle = d3.select("#groupSubtitle")
     subtitle.append("div")
       .attr("id","groupSubtitleText")
+      .attr("class", "groupContent")
       .html("is in the <a class = \"standard\" href = \"peergroup.html?peergroup=" + group + "\"><span>" + groupNames[group] + "</span></a> peer group")
     subtitle.append("div")
-      .attr("class", "thinButton")
-      .append("a")
-      .attr("href", "peergroup.html?peergroup=" + group)
+      .attr("class", "thinButton groupContent")
+      .on("click", function(){ window.location.href = "peergroup.html?peergroup=" + group })
       .text("View metrics")
     subtitle
       .style("border-left", "10px solid " + getGroupColor(group))
@@ -292,41 +375,100 @@ function buildGroupContent(groups, cities){
 /************** Build highlights **********/
   var highlightUl = d3.select("#highlights").append("ul")
     .attr("id", "highlightUl")
+    .attr("class", "groupContent")
   var highlights = groupHighlights[group]
   for(var i =0; i < highlights.length; i++){
     highlightUl.append("li")
-      .attr("class","highlightLi")
+      .attr("class","highlightLi groupContent")
       .html(highlights[i])
   }
 /************** Build map city list **********/
   if(PAGE == "group" || PRINT ){
-    d3.select("#groupCitiesList")
-      .selectAll(".groupCity")
-      .data(groups)
-      .enter()
-      .append("div")
-      .attr("id", function(d){ return "groupCity_" + d.slug})
-      .attr("class", function(d,i){
-        if(i%2 == 0){ return "groupCity even"}
-        else{ return "groupCity odd"}
-      })
-      .text(function(d){ return d.fullName })
-      .on("mouseover", function(d){
-        d3.select("circle.city_" + d.slug).style("opacity",.5)
-        d3.select(this).style("color","#353535")
-      })
-      .on("mouseout", function(d){
-        d3.select("circle.city_" + d.slug).style("opacity",1)
-        d3.select(this).style("color","#1696d2")
-      })
-      .on("click", function(d){
-        window.location.href = "city.html?city=" + d.slug;
-      })
+    if(IS_900()){
+      var columns = (IS_SMALL_PHONE()) ? 2 : 3;
+      var rows = Math.ceil(groups.length/columns)
+      var start = 0;
+      for(var i = 0; i < rows; i++){
+        var rowDiv = d3.select("#groupCitiesList") 
+          .append("div")
+          .attr("class", "groupContent groupCityRow")
+        for(var j = start; j < groups.length; j += (rows)){
+          // console.log(groups[j]["fullName"])
+          var innerDiv = rowDiv.append("div")
+            .datum(groups[j])
+            .attr("class", "groupCityContainer")
+          innerDiv.append("a")
+            .attr("id", function(d){ return "groupCity_" + d.slug})
+            .attr("class", "standard groupCity")
+            .text(function(d){ return d["fullName"] })
+            .on("mouseover", function(d){
+              d3.select("circle.city_" + d.slug).style("opacity",.5)
+              d3.select(this).style("color","#353535")
+            })
+            .on("mouseout", function(d){
+              d3.select("circle.city_" + d.slug).style("opacity",1)
+              d3.select(this).style("color","#1696d2")
+            })
+
+
+        }
+        start += 1; 
+      }
+      updateContentMargin()
+    }else{
+      var innerDiv = d3.select("#groupCitiesList")
+        .selectAll(".groupCity")
+        .data(groups)
+        .enter()
+        .append("div")
+        .attr("id", function(d){ return "groupCity_" + d.slug})
+        .attr("class", function(d,i){
+          if(i%2 == 0){ return "groupCity groupContent even"}
+          else{ return "groupCity groupContent odd"}
+        })
+        .text(function(d){ return d.fullName })
+        .on("mouseover", function(d){
+          d3.select("circle.city_" + d.slug).style("opacity",.5)
+          d3.select(this).style("color","#353535")
+        })
+        .on("mouseout", function(d){
+          d3.select("circle.city_" + d.slug).style("opacity",1)
+          d3.select(this).style("color","#1696d2")
+        })
+        .on("click", function(d){
+          window.location.href = "city.html?city=" + d.slug;
+        })
+
+        if(PRINT){
+          var lilSvg = innerDiv.append("svg")
+            .attr("class","lilSvg")
+            .attr("width", "190")
+            .attr("height", "35")
+            .append("g")
+          lilSvg
+            .append("rect")
+            .attr("fill",function(d,i){
+              if(i%2 == 0){ return "#F5F5F5"}
+              else{ return "#fff"}
+            })
+            .attr("width", "190")
+            .attr("height", "35")
+            .attr("x",0)
+            .attr("y",0)
+          lilSvg.append("text")
+            .text(function(d){ return d.fullName })
+            .attr("x",16)
+            .attr("y",22)
+
+
+        }
+    }
   }
 /************** Build approaches **********/
   d3.select("#approachesGroupName")
     .text(groupNames[group])
   var approachUl = d3.select("#approachesList").append("ul")
+    .attr("class", "groupContent")
     .attr("id", "approachUl")
   var approaches = groupApproaches[group]
   for(var i =0; i < approaches.length; i++){
@@ -337,6 +479,8 @@ function buildGroupContent(groups, cities){
 
 }
 function buildBottomContent(groups, cities){
+  d3.selectAll(".bottomContent").remove()
+
   var group, city;
   if(PAGE == "group"){
     group = getPeerGroup(groups);
@@ -350,7 +494,7 @@ function buildBottomContent(groups, cities){
     .data(groups)
     .enter()
     .append("div")
-    .attr("class","bottomCity")
+    .attr("class","bottomCity bottomContent")
     .append("a")
     .text(function(d){ return d.fullName })
     .attr("href", function(d){ return "city.html?city=" + d.slug})
@@ -358,12 +502,12 @@ function buildBottomContent(groups, cities){
 
   var container = d3.select("#bottomGroupsList")
 
-  var columns = (IS_PHONE()) ? 1 : 2;
+  var columns = (IS_SMALL_PHONE()) ? 1 : 2;
 
   for(var r = 0; r < Math.ceil(8/columns); r++){
     var row = container.append("div")
       .attr("class", function(){
-        return "bottomRow bottomRow_" + (r+1)
+        return "bottomContent bottomRow bottomRow_" + (r+1)
       })
   }
   var rowCount = 1;
@@ -374,10 +518,10 @@ function buildBottomContent(groups, cities){
     if(counter == columns){ counter = 0; rowCount += 1 }
     d3.select(".bottomRow_" + rowCount)
         .append("a")
-        .attr("class","inverted")
+        .attr("class","inverted bottomContent")
         .attr("href", "peergroup.html?peergroup=" + (i))
         .append("div")
-        .attr("class", "bottomGroup")
+        .attr("class", "bottomGroup bottomContent")
         .text(groupNames[i])
         .style("border-left", "10px solid " + getGroupColor(i))
 
@@ -385,6 +529,8 @@ function buildBottomContent(groups, cities){
 }
 
 function buildCharts(cities, groups){
+  d3.selectAll(".chartContent").remove()
+
   var group, city;
   if(PAGE == "group"){
     group = getPeerGroup(groups);
@@ -409,18 +555,14 @@ function buildCharts(cities, groups){
       buildChart(metrics[i], datum)  
     }
     d3.select("#printButton")
-      .append("a")
-      .attr("href", "print_peergroup.html?peergroup=" + group)
-      .attr("target","_blank")
+      .on("click", function(){ window.open("print_peergroup.html?peergroup=" + group) })
       .text("Print")
   }else{
     for(var i = 0; i < metrics.length; i++){
       buildChart(metrics[i], city)  
     }
     d3.select("#printButton")
-      .append("a")
-      .attr("href", "print_city.html?city=" + city.slug)
-      .attr("target","_blank")
+      .on("click", function(){ window.open("print_city.html?city=" + city.slug) })
       .text("Print")
   }
         // <div id = "printButton" class = "thicButton">Print</div>
@@ -436,14 +578,14 @@ function buildCharts(cities, groups){
 
     var container = d3.select("#charts")
       .append("div")
-      .attr("class", "smallChartContainer")
+      .attr("class", "smallChartContainer chartContent")
     var W = (PRINT) ? 130 : 160;
     var H = (PRINT) ? 130 : 160;
     var svg = container.append("svg")
       .attr("width",W)
       .attr("height",H)
     container.append("div")
-      .attr("class","metricName")
+      .attr("class","metricName chartContent")
       .text(metricName)
 
     var margin = {top: 60, right: 0, bottom: 5, left: 0},
@@ -532,6 +674,8 @@ function buildCharts(cities, groups){
 }
 
 function buildTooltip(cities){
+  d3.selectAll("#groupList .groupListGroup").remove()
+  d3.selectAll("#groupList .groupListSpace").remove()
   for(var i = 1; i < 10; i ++){
     var datum = cities.filter(function(o){ return o.group == i })[0]
     d3.select("#groupList")
@@ -546,6 +690,7 @@ function buildTooltip(cities){
         mouseout(cities)
       })
       .on("click", function(d){
+        $("#stateSelect" ).val("default").selectmenu("refresh")
         highlight(d, false, "click", cities)
       })
     d3.select("#groupList")
@@ -566,6 +711,9 @@ function buildTooltip(cities){
 }
 
 function buildStateSelect(cities){
+  d3.selectAll("#stateSelect option.state").remove()
+  d3.selectAll("#groupSelect option.group").remove()
+
   d3.select("#clearSelection")
     .on("click", function(){
       clearSelected(cities)
@@ -599,6 +747,26 @@ function buildStateSelect(cities){
       }
     }
   })
+  if(IS_900()){
+    d3.select("#groupSelect")
+      .selectAll("option.group")
+      .data(groupNames.filter(function(d){ return d != null}))
+      .enter()
+      .append("option")
+        .attr("class", "group")
+        .attr("value", function(d,i ){ return i+1})
+        .text(function(d,i){ return d})
+     $("#groupSelect" ).selectmenu({
+      change: function(event, d){
+        var group = d.item.value
+        var d = cities.filter(function(o){ return o.group == group })[0]
+        highlight(d, false, "click", cities)
+        $("#stateSelect" ).val("default").selectmenu("refresh")
+      }
+    })
+    d3.select("#groupSelect-button").classed("active", true)
+  }
+
 }
 
 function highlight(datum, isCity, action, cities){
@@ -632,6 +800,9 @@ function highlight(datum, isCity, action, cities){
       $("#stateSelect" ).val(city).selectmenu("refresh")
       d3.select("#stateSelect-button").classed("active", true)
     }
+    if(IS_900()){
+      $("#groupSelect" ).val(group).selectmenu("refresh")
+    }
     d3.selectAll(".clicked").classed("clicked", false)
     if(isCity){
       d3.select("circle.city_" + city)
@@ -659,12 +830,31 @@ function highlight(datum, isCity, action, cities){
         return 1;
       }
     })
-  d3.selectAll(".cityText.group_" + group)
-    .each(function(){
-      this.parentNode.appendChild(this)
-    })
-    .transition()
-    .style("opacity", 1)
+  if(IS_900()){
+    d3.selectAll(".cityText.group_" + group)
+      .each(function(){
+        this.parentNode.appendChild(this)
+      })
+      .transition()
+      .style("opacity", 1)
+  }
+  else if(IS_1000()){
+    if(isCity){
+      d3.selectAll(".cityText.city_" + city)
+        .each(function(){
+          this.parentNode.appendChild(this)
+        })
+        .transition()
+        .style("opacity", 1)
+    }
+  }else{
+    d3.selectAll(".cityText.group_" + group)
+      .each(function(){
+        this.parentNode.appendChild(this)
+      })
+      .transition()
+      .style("opacity", 1)
+  }
 /******** UPDATE TOOLTIP HOME ************/
   if(PAGE == "home"){
     var d = datum;
@@ -685,23 +875,33 @@ function highlight(datum, isCity, action, cities){
       d3.select("#subtitleViewMore a")
         .attr("href", "peergroup.html?peergroup=" + d.group)
       d3.select("#tooltipSubtitle").style("display", "block")
-      d3.select("#tooltipViewMore a")
-        .attr("href", "city.html?city=" + d.slug)
+      d3.select("#tooltipViewMore")
+        .on("click", function(){ window.location.href = "city.html?city=" + d.slug })
         .text("View city metrics")
     }else{
       d3.select("#tooltipTitle").text(groupNames[d.group])
       d3.select("#tooltipSubtitle").style("display", "none")
-      d3.select("#tooltipViewMore a")
-        .attr("href", "peergroup.html?peergroup=" + d.group)
+      d3.select("#tooltipViewMore")
+        .on("click", function(){ window.location.href = "peergroup.html?peergroup=" + d.group })
         .text("View metrics")
     }
-    d3.select("#tooltipContainer")
-      .style("border-left", "10px solid " + getGroupColor(d.group))
+    if(! IS_MOBILE()){
+      d3.select("#tooltipContainer")
+        .style("border-left", "10px solid " + getGroupColor(d.group))
+      d3.select("#tooltipTitle")
+        .style("border-bottom", "none")
+    }else{
+      d3.select("#tooltipContainer")
+        .style("border-left", "none")
+      d3.select("#tooltipTitle")
+        .style("border-bottom", "10px solid " + getGroupColor(d.group))
+    }
     var subset = cities.filter(function(o){ return o.group == d.group })
     alphaSort(subset)
     var cols;
     if(IS_PHONE()){ cols = 2}
     else if(IS_MOBILE()){ cols = 3}
+    else if(IS_1000()){ cols = 5}
     else{ cols = 4 }
     d3.selectAll("#tooltipCitiesList .col").remove()
     
@@ -717,11 +917,24 @@ function highlight(datum, isCity, action, cities){
             .datum(subset[i*n + j])
             .attr("class", "tooltipCity")
             .on("mouseover", function(d){
+              if(IS_1000()){
+                d3.selectAll(".cityText.city_" + d.slug)
+                  .each(function(){
+                    this.parentNode.appendChild(this)
+                  })
+                  .transition()
+                  .style("opacity", 1)
+              }
               d3.select("circle.city_" + d.slug)
                 .transition()
                 .style("opacity",.5)
             })
             .on("mouseout", function(d){
+              if(IS_1000()){
+                d3.selectAll(".cityText")
+                  .transition()
+                  .style("opacity", 0)
+              }
               d3.select("circle.city_" + d.slug)
                 .transition()
                 .style("opacity",function(){
@@ -746,7 +959,7 @@ function highlight(datum, isCity, action, cities){
           col.append("div")
             .attr("class", "tooltipCity")
             .text("a")
-            .style("opacity",0)
+            .style("color","transparent")
         }
       }
     }
@@ -755,6 +968,8 @@ function highlight(datum, isCity, action, cities){
     d3.select("#groupCity_" + city)
       .style("color", "#353535")
   }
+    updateContentMargin()
+
 }
 
 function mouseout(cities){
@@ -858,6 +1073,36 @@ function hideMenu(){
 }
 
 
+function buildPage(us, cities, groups){
+    updateContentMargin();
+    if(PAGE == "home"){
+      buildTooltip(cities)
+      buildStateSelect(cities)
+      if(! IS_MOBILE()){
+        drawMap("homeMap", us, cities)
+      }else{
+        d3.select("#homeMap svg").remove()
+        clearSelected(cities)
+      }
+    }else{
+      var group = cities.filter(function(o){ return o.group == getPeerGroup(cities) })
+      alphaSort(group)
+      buildGroupContent(group, cities)
+      if(PRINT == false){ buildBottomContent(group, cities) }
+      buildCharts(cities, groups)
+      if(PAGE == "group" && PRINT == false){
+        if( !IS_MOBILE()){
+          drawMap("groupMap", us, group)
+        }else{
+          d3.select("#groupMap svg").remove()
+        }
+      }
+      else if(PRINT == true){    
+        drawMap("printMap", us, group)    
+      }
+    }
+}
+
 d3.json("data/map.json", function(error, us) {
   d3.tsv("data/cities.tsv")
     .row(typeCities)
@@ -865,40 +1110,23 @@ d3.json("data/map.json", function(error, us) {
       d3.csv("data/groups.csv")
         .row(typeGroups)
         .get(function(error, groups){
-        if(PAGE == "home"){
-          buildTooltip(cities)
-          buildStateSelect(cities)
-          drawMap("homeMap", us, cities)
-          
+          buildPage(us, cities, groups)
           d3.select(window)
             .on("resize", function(){
-              drawMap("homeMap", us, cities)
+              if(PRINT){
+                return false;
+              }else{
+                buildPage(us, cities, groups)
+              }
             });
-        }else{
-          var group = cities.filter(function(o){ return o.group == getPeerGroup(cities) })
-          alphaSort(group)
-          buildGroupContent(group, cities)
-          if(PRINT == false){ buildBottomContent(group, cities) }
-          buildCharts(cities, groups)
-          if(PAGE == "group" && PRINT == false){
-            drawMap("groupMap", us, group)
-            
-            d3.select(window)
-              .on("resize", function(){
-                drawMap("groupMap", us, group)
-              });
-          }
-        }
 
 
-
-
-        d3.select(".menuTab.cities")
-          .on("mouseover", function(){ showCityMenu(cities) })
-        d3.select(".menuTab.home")
-          .on("mouseover", hideMenu)
-        d3.select(".menuTab.groups")
-          .on("mouseover", showGroupMenu)
+          d3.select(".menuTab.cities")
+            .on("mouseover", function(){ showCityMenu(cities) })
+          d3.select(".menuTab.home")
+            .on("mouseover", hideMenu)
+          d3.select(".menuTab.groups")
+            .on("mouseover", showGroupMenu)
     })
   })
 })
