@@ -609,7 +609,7 @@ function buildCharts(cities, groups){
       activeGroup.category = "group"
       national.category = "national"
       city.category = "city"
-      data = [activeGroup,national, city]
+      data = [city, activeGroup,national]
     }
 
     var x = d3.scaleBand().rangeRound([0, width]).padding(0.3),
