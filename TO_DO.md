@@ -1,3 +1,3 @@
-- check final url in printout once URL is final
-- make sure print versions have pointer events hider thing on top
 - mobile menus
+- social img
+- check github link
