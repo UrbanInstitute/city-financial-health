@@ -538,7 +538,7 @@ function buildCharts(cities, groups){
     city = getCity(cities)  
     group = city.group
   }
-  var metrics = [["credit-overall","Median credit score",800,"int"],["credit-white","Credit score, white areas",800,"int"],["credit-non-white","Credit score, nonwhite areas",800,"int"],["debt-percent","Delinquent debt",.7,"percent0"],["debt-amount","Median delinquent debt",2400,"dollars"],["foreclosure","Home foreclosure",.025,"percent2"],["cost-burdened","Housing-cost burdened, low-income",.85,"percent0"],["unbanked","Unbanked, metro area",.18,"percent1"],["health-insured","Health insurance coverage",.91,"percent0"],["eitc","Received EITC, low-income",.55,"percent0"],["unemployment","Unemployment rate",.21,"percent1"],["labor-force-participation","Labor force participation rate",.76,"percent0"],["low-income","Below 200% of federal poverty level",.66,"percent0"],["pop-change","Population change, 2000–15",.53,"percent0"],["gini","Gini index of income inequality",.58,"gini"]]
+  var metrics = [["credit-overall","Median credit score",800,"int"],["credit-white","Credit score, white areas",800,"int"],["credit-non-white","Credit score, nonwhite areas",800,"int"],["debt-percent","Delinquent debt",.7,"percent0"],["debt-amount","Median delinquent debt",2400,"dollars"],["foreclosure","Home foreclosure",.025,"percent2"],["cost-burdened","Housing-cost burdened, low-income",.85,"percent0"],["unbanked","Unbanked, metro area",.18,"percent1"],["health-insured","Health insurance coverage",.91,"percent0"],["eitc","Received EITC, low-income",.55,"percent0"],["unemployment","Unemployment rate",.21,"percent1"],["labor-force-participation","Labor force participation rate",.76,"percent0"],["low-income","Below 200% of federal poverty level",.66,"percent0"],["pop-change","Population change, 2000&ndash;15",.53,"percent0"],["gini","Gini index of income inequality",.58,"gini"]]
 
   function format(val, formatter){
     if(formatter == "int"){ return d3.format(".0f")(val) }
@@ -586,7 +586,7 @@ function buildCharts(cities, groups){
       .attr("height",H)
     container.append("div")
       .attr("class","metricName chartContent")
-      .text(metricName)
+      .html(metricName)
 
     var margin = {top: 60, right: 0, bottom: 5, left: 0},
     width = W - margin.left - margin.right,

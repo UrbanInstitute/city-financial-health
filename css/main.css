@@ -34,6 +34,10 @@ body{
 	margin-top: 20px;
 	margin-bottom: 50px;
 }
+a{
+	color: #1696d2;
+	text-decoration: none;
+}
 a.standard{
 	color: #1696d2;
 	text-decoration: none;
@@ -665,6 +669,9 @@ a.inverted:hover{
     padding-left: 15px;
     margin-bottom: 40px;
 }
+.approachLi strong{
+	font-size: 18px;
+}
 #approachesList{
     padding-bottom: 50px;
 }
@@ -909,9 +916,9 @@ body.print .groupCity{
 body.print .thinButton{
 	display: none;
 }
-a.print{
+body.print a{
 	text-decoration: none;
-	color: #1696d2;
+	color: #353535;
 }
 
 body.print #controlsContainer{
@@ -964,10 +971,8 @@ body.print .groupCity{
     margin: 15mm;	
    /*margin-right: 45mm;  for compatibility with both A4 and Letter */
   }
-   a.print:after{
-   	content:" (" attr(href) ") ";
-   	font-weight:normal;
-   	font-style: italic;
+   body.print a:after{
+   	content: none !important;
    }
    .page-break { height:0; page-break-after:always; margin:0; border-top:none; }
 }
