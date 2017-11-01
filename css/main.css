@@ -447,9 +447,6 @@ a.inverted:hover{
 	font-style: italic;
 	line-height: 22px;
 }
-.footerSpecialCredit, #bottomFooterCredits{
-	margin-top: 45px;
-}
 #bottomFooterCredits{
 	margin-bottom: 45px;
 }
@@ -514,7 +511,7 @@ a.inverted:hover{
     line-height: 26px;
     list-style: initial;
     padding-left: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 25px;
 }
 #groupCitiesListContainer{
     display: block;
@@ -618,9 +615,12 @@ a.inverted:hover{
 .axis--y, .tick{
 	display: none;
 }
-#chartSource, #chartNote{
+#chartSource, #chartNote, #noDataNote{
 	display: block;
 	font-size: 12px;
+}
+#noDataNote{
+	display: none;
 }
 #chartSource span, #chartNote span{
 	font-weight: bold;
@@ -775,8 +775,8 @@ body.print #title, body.print #subtitle{
 	display: inline-block;
 	font-size: 28px;
 	width: auto;
-	margin-bottom: 10px;
-	margin-top: 15px;
+	margin-bottom: 8px;
+	margin-top: 12px;
 }
 body.print .introText {
     font-size: 16px;
@@ -911,7 +911,7 @@ body.print .groupCity{
 	margin-top: 10px;
 }
 .full.logo img{
-	width: 144px;
+	width: 124px;
 }
 body.print .thinButton{
 	display: none;

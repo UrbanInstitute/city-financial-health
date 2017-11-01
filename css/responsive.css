@@ -18,6 +18,30 @@
 	display: none;
 }
 @media(max-width: 1200px){
+/* menus */
+.group.menu .popupGroup{
+    font-size: 15px;
+    width: 210px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.group.menu .popupRow a:first-child{
+	    margin-left: calc(50% - 225px);
+
+}
+.group.menu .popupRow{
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+.colContainer{
+	width: 100%;
+}
+.city.menu .popupColumn{
+	width: 160px;
+}
+.colContainer .popupColumn:first-child{
+	margin-left: calc(50% - 240px);
+}
 /* home */
 	#breakpoint1200{
 		display: block;
@@ -43,6 +67,18 @@
 	#highlightsContainer {
 	    margin-top: 220px;
 	}
+	#groupSubtitle{
+		display: block;
+		height: auto;
+	}
+	#highlights{
+		display: block;
+	}
+	#groupSubtitle .thinButton {
+    	margin-top: 10px;
+	}
+
+
 
 }
 @media(max-width: 1000px){
@@ -329,6 +365,50 @@
 	}
 }
 @media(max-width: 500px){
+/* popup menu */
+.menu.popup{
+	height: 100%;
+	top: 0px;
+	box-shadow: none;
+}
+.menu.popup:after, .menu.popup:before {
+	border: none !important;
+}
+.group.menu .popupGroup {
+    font-size: 14px;
+    width: 130px;
+    margin-right: 5px;
+}
+.group.menu .popupRow a:first-child {
+    margin-left: calc(50% - 150px);
+}
+.group.menu .popupRow_first{
+	margin-top: 120px;
+}
+#menuClose{
+	position: absolute;
+    top: 10px;
+    right: calc(50% - 150px);
+    font-size: 44px;
+    font-weight: 100;
+}
+#menuBack{
+	position: absolute;
+    color: #1696d2;
+    text-transform: uppercase;
+    top: 24px;
+    left: calc(50% - 150px);
+    font-size: 18px;
+}
+#menuMobileTitle{
+	position: absolute;
+    top: 82px;
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: bold;
+}
 /* home */
 	#isSmallPhone{
 		display: block;

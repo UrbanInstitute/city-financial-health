@@ -240,6 +240,10 @@ function clearSelected(cities){
     .style("opacity",0)
 }
 
+function clean(val){
+  if(val == '' || isNaN(+val)){ return null }
+  else{ return +val }
+}
 function typeCities(d){
   d[0] = +d.long;
   d[1] = +d.lat;
@@ -248,23 +252,22 @@ function typeCities(d){
   d.city = d.city;
   d.state = d.state;
   d.fullName = d.city + ", " + d.state
-  d["credit-overall"] = +d["credit-overall"];
-  d["credit-non-white"] = +d["credit-non-white"];
-  d["credit-white"] = +d["credit-white"];
-  d["debt-percent"] = +d["debt-percent"];
-  d["debt-amount"] = +d["debt-amount"];
-  d["foreclosure"] = +d["foreclosure"];
-  d["cost-burdened"] = +d["cost-burdened"];
-  d["eitc"] = +d["eitc"];
-  d["unbanked"] = +d["unbanked"];
-  d["health-insured"] = +d["health-insured"];
-  d["health-uninsured"] = +d["health-uninsured"];
-  d["low-income"] = +d["low-income"];
-  d["unemployment"] = +d["unemployment"];
-  d["labor-force-participation"] = +d["labor-force-participation"];
-  d["gini"] = +d["gini"];
-  d["pop-change"] = +d["pop-change"];
-
+  d["credit-overall"] = clean(d["credit-overall"]);
+  d["credit-non-white"] = clean(d["credit-non-white"]);
+  d["credit-white"] = clean(d["credit-white"]);
+  d["debt-percent"] = clean(d["debt-percent"]);
+  d["debt-amount"] = clean(d["debt-amount"]);
+  d["foreclosure"] = clean(d["foreclosure"]);
+  d["cost-burdened"] = clean(d["cost-burdened"]);
+  d["eitc"] = clean(d["eitc"]);
+  d["unbanked"] = clean(d["unbanked"]);
+  d["health-insured"] = clean(d["health-insured"]);
+  d["health-uninsured"] = clean(d["health-uninsured"]);
+  d["low-income"] = clean(d["low-income"]);
+  d["unemployment"] = clean(d["unemployment"]);
+  d["labor-force-participation"] = clean(d["labor-force-participation"]);
+  d["gini"] = clean(d["gini"]);
+  d["pop-change"] = clean(d["pop-change"]);
   return d;
 }
 function typeGroups(d){
@@ -367,7 +370,7 @@ function buildGroupContent(groups, cities){
     subtitle.append("div")
       .attr("class", "thinButton groupContent")
       .on("click", function(){ window.location.href = "peergroup.html?peergroup=" + group })
-      .text("View metrics")
+      .text("View peer group profile")
     subtitle
       .style("border-left", "10px solid " + getGroupColor(group))
   }
@@ -572,9 +575,8 @@ function buildCharts(cities, groups){
     var metricVar = metric[0]
     var metricName = metric[1]
     var yMax = metric[2]
-    var yMin = (metricVar == "pop-change") ? -.35 : 0;
+    var yMin;
     var formatter = metric[3]
-
 
     var container = d3.select("#charts")
       .append("div")
@@ -585,10 +587,18 @@ function buildCharts(cities, groups){
       .attr("width",W)
       .attr("height",H)
     container.append("div")
+      .datum(datum)
       .attr("class","metricName chartContent")
-      .html(metricName)
+      .html(function(d){
+        if(typeof(d) == "undefined" || d[metricVar] == null){
+          d3.select("#noDataNote").style("display","block")
+          return metricName + "<sup>a</sup>"
+        }else{
+          return metricName
+        }
+      })
 
-    var margin = {top: 60, right: 0, bottom: 5, left: 0},
+    var margin = {top: 60, right: 0, bottom: 10, left: 0},
     width = W - margin.left - margin.right,
     height = H - margin.top - margin.bottom;
 
@@ -610,6 +620,20 @@ function buildCharts(cities, groups){
       national.category = "national"
       city.category = "city"
       data = [city, activeGroup,national]
+    }
+
+    if(metricVar == "pop-change"){
+      // console.log(city, activeGroup)
+      var cityPc = (datum == null) ? 0 : city["pop-change"];
+      if(cityPc < 0 || activeGroup["pop-change"] < 0){
+        yMin = -.35;
+        yMax = .53;
+      }else{
+        yMax = .88;
+        yMin =  0;
+      }
+    }else{
+      yMin = 0;
     }
 
     var x = d3.scaleBand().rangeRound([0, width]).padding(0.3),
@@ -659,7 +683,7 @@ function buildCharts(cities, groups){
           else{ return y(d[metricVar]) - 5; }
         })
         .text(function(d){
-          if(d[metricVar] == 0){
+          if(d[metricVar] == null){
             return ''
           }else{
             return format(d[metricVar], formatter)
@@ -879,13 +903,13 @@ function highlight(datum, isCity, action, cities, isGroupList){
       d3.select("#tooltipSubtitle").style("display", "block")
       d3.select("#tooltipViewMore")
         .on("click", function(){ window.location.href = "city.html?city=" + d.slug })
-        .text("View city metrics")
+        .text("View city profile")
     }else{
       d3.select("#tooltipTitle").text(groupNames[d.group])
       d3.select("#tooltipSubtitle").style("display", "none")
       d3.select("#tooltipViewMore")
         .on("click", function(){ window.location.href = "peergroup.html?peergroup=" + d.group })
-        .text("View metrics")
+        .text("View peer group profile")
     }
     if(! IS_MOBILE()){
       d3.select("#tooltipContainer")
@@ -1018,7 +1042,7 @@ function showCityMenu(cities){
   var container = menu.append("div")
     .attr("class", "colContainer")
   
-  var columns = (IS_MOBILE()) ? 3 : 5;
+  var columns = (IS_1200()) ? 3 : 5;
 
   for(var i = 0; i < columns; i++){
     var col = container.append("div")
@@ -1046,7 +1070,7 @@ function showGroupMenu(){
   var container = menu.append("div")
     .attr("class", "colContainer")
   
-  var columns = (IS_MOBILE()) ? 2 : 3;
+  var columns = (IS_1200()) ? 2 : 3;
 
   for(var r = 0; r < Math.ceil(9/columns); r++){
     var row = container.append("div")
@@ -1069,10 +1093,24 @@ function showGroupMenu(){
         
     }
   }
+  if(IS_SMALL_PHONE()){
+    menu.append("div")
+      .attr("id", "menuClose")
+      .html("&#xd7;")
+      // .on("click", hideMenu())
+    menu.append("div")
+      .attr("id", "menuBack")
+      .html("Back")
+      // .on("click", hideMenu())
+    menu.append("div")
+      .attr("id", "menuMobileTitle")
+      .html("Peer groups")
+  }
 }
 
 function hideMenu(){
-  d3.selectAll(".menu.popup").remove() 
+  console.log("hide")
+  d3.selectAll(".menu.popup").remove()  
 }
 
 
