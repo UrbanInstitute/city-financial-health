@@ -8,13 +8,16 @@
 #citySelectLabel, #groupSelectLabel{
 	display: none;
 }
-#breakpoint1200, #breakpoint1000, #breakpoint900, #isMobile, #isPhone, #isSmallPhone{
+#breakpoint1200, #breakpoint1000, #breakpoint900, #isMobile, #isPhone, #isSmallPhone, #isVerySmallPhone{
 	position: fixed;
 	width: 0px;
 	height: 0px;
 	top: 0px;
 	left: 0px;
 	pointer-events: none;
+	display: none;
+}
+#menuBack{
 	display: none;
 }
 @media(max-width: 1200px){
@@ -379,26 +382,48 @@
     width: 130px;
     margin-right: 5px;
 }
+.city.menu .popupColumn {
+    width: 130px;
+    font-size: 14px;
+}
+.colContainer .popupColumn:first-child {
+    margin-left: calc(50% - 195px);
+}
 .group.menu .popupRow a:first-child {
     margin-left: calc(50% - 150px);
 }
 .group.menu .popupRow_first{
 	margin-top: 120px;
 }
+.city.menu .colContainer{
+	margin-top: 100px;
+}
+.group.menu #menuClose{
+	right: calc(50% - 150px);
+}
+.group.menu #menuBack{
+	left: calc(50% - 150px);
+}
+.city.menu #menuClose{
+	right: calc(50% - 195px);
+}
+.city.menu #menuBack{
+	left: calc(50% - 195px);
+}
 #menuClose{
 	position: absolute;
     top: 10px;
-    right: calc(50% - 150px);
     font-size: 44px;
     font-weight: 100;
+    cursor: pointer;
 }
 #menuBack{
 	position: absolute;
     color: #1696d2;
     text-transform: uppercase;
     top: 24px;
-    left: calc(50% - 150px);
     font-size: 18px;
+    cursor: pointer;
 }
 #menuMobileTitle{
 	position: absolute;
@@ -451,8 +476,80 @@
 	}
 }
 @media(max-width: 400px){
+/* popups*/
+.city.menu .popupColumn {
+    width: 150px;
+    font-size: 14px;
+}
+.city.menu .colContainer{
+	margin-top: -13px;
+}
+.city.menu #menuClose{
+	right: calc(50% - 150px);
+}
+.city.menu #menuBack{
+	display: none;
+}
+.city.menu #menuMobileTitle{
+	display: none;
+}
+.colContainer .popupColumn:first-child {
+    margin-left: calc(50% - 150px);
+}
+/* menu tabs*/
+.menuTab.menu{
+	display: block;
+	margin-left: 125px;
+	cursor: pointer;
+}
+.menuTab:not(.menu){
+	display: none;
+}
+.menuTab.menu img{
+	width: 13px;
+    top: -1px;
+    margin-left: 3px;
+    position: relative;
+}
+#menuBar span{
+	display: none;
+}
+#menuBack{
+	display: block;
+}
+.mobileMenuRow{
+	width: calc(100% - 80px);
+    margin-left: 40px;
+    display: block;
+    color: #353535;
+    text-transform: uppercase;
+    text-align: center;
+    height: 41px;
+    border-top: 1px solid #D2D2D2;
+    border-bottom: 1px solid #D2D2D2;
+    padding-top: 21px;
+    cursor: pointer;
+}
+.mobileMenuRow.cities{
+	border: none;
+}
+.mobileMenuRow.home{
+	margin-top: 100px;
+}
+.mobile.menu #menuClose{
+	right: 40px;
+}
+.mobileMenuRow:hover{
+	background: #1696d2;
+	color: #fff;
+	border: 1px solid #1696d2;
+}
+/*chartz*/
 	.smallChartContainer {
     	width: 100%;
+	}
+	#isVerySmallPhone{
+		display: block;
 	}
 	#chartKey {
 	    margin-left: calc(50% - 80px);

@@ -109,6 +109,9 @@ a.inverted:hover{
     width: 126px;
     text-align: right;
 }
+.menuTab.menu{
+	display: none;
+}
 
 
 /*********************************************************************************/

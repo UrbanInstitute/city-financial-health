@@ -39,6 +39,10 @@ function IS_SMALL_PHONE(){
   if(PRINT){ return false }
   else { return d3.select("#isSmallPhone").style("display") == "block"; }
 }
+function IS_VERY_SMALL_PHONE(){
+  if(PRINT){ return false }
+  else { return d3.select("#isVerySmallPhone").style("display") == "block"; }
+}
 function getGroupColor(group){
   var colors = [null,"#DB2B27","#73BFE2","#55B748","#EC008B","#1696D2","#12719E","#FDBF11","#9D9D9D", "#000000"]
   return colors[group]
@@ -151,7 +155,6 @@ function drawMap(containerID, us, cities){
       .attr("class", function(d){ return "cityText city_" + d.slug + " group_" + d.group  })
       .attr("x", function(d){
         var small = IS_1200() || PRINT;
-        console.log(small)
         if(IS_1000() && !IS_900()){
           if(d.slug == "san-francisco-ca" || d.slug == "san-jose-ca" || d.slug == "oakland-ca" || d.slug == "sacramento-ca"){
             return projection([d[0], d[1] ])[0] + 5 
@@ -396,7 +399,6 @@ function buildGroupContent(groups, cities){
           .append("div")
           .attr("class", "groupContent groupCityRow")
         for(var j = start; j < groups.length; j += (rows)){
-          // console.log(groups[j]["fullName"])
           var innerDiv = rowDiv.append("div")
             .datum(groups[j])
             .attr("class", "groupCityContainer")
@@ -623,7 +625,6 @@ function buildCharts(cities, groups){
     }
 
     if(metricVar == "pop-change"){
-      // console.log(city, activeGroup)
       var cityPc = (datum == null) ? 0 : city["pop-change"];
       if(cityPc < 0 || activeGroup["pop-change"] < 0){
         yMin = -.35;
@@ -816,7 +817,6 @@ function highlight(datum, isCity, action, cities, isGroupList){
       .style("opacity", 0)
 
   if(action == "click"){
-    console.log(isGroupList)
     var op = (isGroupList == true) ? 0 : 1;
     d3.select("#clearSelection")
       .transition()
@@ -1042,7 +1042,15 @@ function showCityMenu(cities){
   var container = menu.append("div")
     .attr("class", "colContainer")
   
-  var columns = (IS_1200()) ? 3 : 5;
+  var columns;
+  if(IS_VERY_SMALL_PHONE()){
+    columns = 2;
+  }
+  else if(IS_1200()){
+    columns = 3;
+  }else{
+    columns = 5;
+  }
 
   for(var i = 0; i < columns; i++){
     var col = container.append("div")
@@ -1056,9 +1064,28 @@ function showCityMenu(cities){
         
     }
   }
+  if(IS_SMALL_PHONE()){
+    menu.append("div")
+      .attr("id", "menuClose")
+      .html("&#xd7;")
+      .on("click", function(){
+          d3.event.stopPropagation();
+          hideMenu()
+      })
+    menu.append("div")
+      .attr("id", "menuBack")
+      .html("Back")
+      .on("click", function(){
+          d3.event.stopPropagation();
+          hideOneMenu(cities)
+      })
+    menu.append("div")
+      .attr("id", "menuMobileTitle")
+      .html("Cities")
+  }
 }
 
-function showGroupMenu(){
+function showGroupMenu(cities){
   hideMenu();
   if(d3.select(".group.menu.popup").node() != null){
     return false;
@@ -1097,20 +1124,67 @@ function showGroupMenu(){
     menu.append("div")
       .attr("id", "menuClose")
       .html("&#xd7;")
-      // .on("click", hideMenu())
+      .on("click", function(){
+          d3.event.stopPropagation();
+          hideMenu()
+      })
     menu.append("div")
       .attr("id", "menuBack")
       .html("Back")
-      // .on("click", hideMenu())
+      .on("click", function(){
+          d3.event.stopPropagation();
+          hideOneMenu(cities)
+      })
     menu.append("div")
       .attr("id", "menuMobileTitle")
       .html("Peer groups")
   }
 }
+function showMobileMenu(cities){
+    hideMenu();
+  if(d3.select(".mobile.menu.popup").node() != null){
+    return false;
+  }
+  var menu = d3.select("body")
+    .append("div")
+    .attr("class", "mobile menu popup")
+    .on("mouseleave", hideMenu)
+  var container = menu.append("div")
+    .attr("class", "colContainer")
+  
+  container.append("a")
+    .attr("href", "index.html")
+    .append("div")
+    .attr("class", "mobileMenuRow home")
+    .text("Home")
+
+  container.append("div")
+    .attr("class","mobileMenuRow cities")
+    .text("Cities")
+    .on("click", function(){ showCityMenu(cities) })
+
+  container.append("div")
+    .attr("class","mobileMenuRow groups")
+    .text("Peer groups")
+    .on("click", function(){ showGroupMenu(cities) })
+
+  menu.append("div")
+    .attr("id", "menuClose")
+    .html("&#xd7;")
+    .on("click", function(){
+        d3.event.stopPropagation();
+        hideMenu()
+    })
+
+}
 
 function hideMenu(){
-  console.log("hide")
-  d3.selectAll(".menu.popup").remove()  
+  d3.selectAll(".menu.popup").remove();  
+}
+
+function hideOneMenu(cities){
+ d3.selectAll(".menu.popup").remove();
+ showMobileMenu(cities);
 }
 
 
@@ -1161,13 +1235,21 @@ d3.json("data/map.json", function(error, us) {
               }
             });
 
-
+          var eventType = (IS_PHONE()) ? "click" : "mouseover"
           d3.select(".menuTab.cities")
-            .on("mouseover", function(){ showCityMenu(cities) })
+            .on(eventType, function(){
+              showCityMenu(cities)
+            })
           d3.select(".menuTab.home")
             .on("mouseover", hideMenu)
           d3.select(".menuTab.groups")
-            .on("mouseover", showGroupMenu)
+            .on(eventType, function(){
+              showGroupMenu(cities)
+            })
+          d3.select(".menuTab.menu")
+            .on("click", function(){
+              showMobileMenu(cities)
+            })
     })
   })
 })
