@@ -1038,7 +1038,9 @@ function showCityMenu(cities){
   var menu = d3.select("body")
     .append("div")
     .attr("class", "city menu popup")
-    .on("mouseleave", hideMenu)
+  if(! IS_PHONE()){
+    menu.on("mouseleave", hideMenu)
+  }
   var container = menu.append("div")
     .attr("class", "colContainer")
   
@@ -1093,8 +1095,10 @@ function showGroupMenu(cities){
   var menu = d3.select("body")
     .append("div")
     .attr("class", "group menu popup")
-    .on("mouseleave", hideMenu)
-  var container = menu.append("div")
+    if(! IS_PHONE()){
+      menu.on("mouseleave", hideMenu)
+    }
+    var container = menu.append("div")
     .attr("class", "colContainer")
   
   var columns = (IS_1200()) ? 2 : 3;
@@ -1148,7 +1152,10 @@ function showMobileMenu(cities){
   var menu = d3.select("body")
     .append("div")
     .attr("class", "mobile menu popup")
-    .on("mouseleave", hideMenu)
+  if(! IS_PHONE()){
+    menu.on("mouseleave", hideMenu)
+  }
+
   var container = menu.append("div")
     .attr("class", "colContainer")
   
@@ -1240,8 +1247,10 @@ d3.json("data/map.json", function(error, us) {
             .on(eventType, function(){
               showCityMenu(cities)
             })
-          d3.select(".menuTab.home")
-            .on("mouseover", hideMenu)
+          if(! IS_PHONE()){
+            d3.select(".menuTab.home")
+              .on("mouseover", hideMenu)
+          }
           d3.select(".menuTab.groups")
             .on(eventType, function(){
               showGroupMenu(cities)
