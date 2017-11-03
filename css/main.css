@@ -613,6 +613,9 @@ a.inverted:hover{
 .barLabel, .barLabelHide{
 	font-size: 13px;
 }
+.barLabelHide{
+	opacity: 0;
+}
 .axis--y, .tick{
 	display: none;
 }
