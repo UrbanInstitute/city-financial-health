@@ -715,14 +715,18 @@ function buildTooltip(cities){
       .attr("class", "groupListGroup groupListGroup_" + i)
       .text(groupNames[i])
       .on("mouseover", function(d){
-        highlight(d, false, "hover", cities)
+        if(! IS_1000()){
+          highlight(d, false, "hover", cities)
+        }
       })
       .on("mouseout", function(){
         mouseout(cities, true)
       })
       .on("click", function(d){
-        $("#stateSelect" ).val("default").selectmenu("refresh")
-        highlight(d, false, "click", cities)
+        if(! IS_1000()){
+          $("#stateSelect" ).val("default").selectmenu("refresh")
+          highlight(d, false, "click", cities)
+        }
       })
     d3.select("#groupList")
       .append("div")
@@ -1005,7 +1009,7 @@ function highlight(datum, isCity, action, cities, isGroupList){
 }
 
 function mouseout(cities, isGroupList){
-    if(IS_PHONE()){ return false; }
+    if(IS_1000()){ return false; }
     if(PAGE == "home"){
       d3.selectAll("circle")
         .transition()
