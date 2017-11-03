@@ -1240,6 +1240,8 @@ function buildPage(us, cities, groups){
     }
 }
 
+
+var windowWidth = $(window).width();
 d3.json("data/map.json", function(error, us) {
   d3.tsv("data/cities.tsv")
     .row(typeCities)
@@ -1250,6 +1252,8 @@ d3.json("data/map.json", function(error, us) {
           buildPage(us, cities, groups)
           d3.select(window)
             .on("resize", function(){
+              if ($(window).width() == windowWidth) {return false}
+              windowWidth = $(window).width();
               if(PRINT){
                 return false;
               }else{
