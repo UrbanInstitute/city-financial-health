@@ -1,3 +1,1 @@
-- mobile menus
-- social img
 - check github link

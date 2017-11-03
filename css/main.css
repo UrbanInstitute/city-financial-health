@@ -67,7 +67,7 @@ a.inverted:hover{
 }
 
 #tabWrapper{
-	width: 310px;
+	width: 292px;
     display: block;
     margin: 0 auto;
     cursor: pointer;
@@ -96,7 +96,7 @@ a.inverted:hover{
 	color: #1696d2;
 }
 .menuTab.home{
-	width: 78px;
+	width: 71px;
 }
 .menuTab.cities{
 	width: 98px;
@@ -106,7 +106,7 @@ a.inverted:hover{
 }
 .menuTab.groups{
 	float: right;
-    width: 126px;
+    width: 123px;
     text-align: right;
 }
 .menuTab.menu{

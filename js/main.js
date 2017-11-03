@@ -233,7 +233,7 @@ function drawMap(containerID, us, cities){
 function clearSelected(cities){
   d3.select("#stateSelect-button").classed("active", false)
   var init = cities.filter(function(o){ return o.group == 1 })[0]
-  highlight(init, false, "click", cities)
+  if(PAGE != "group") { highlight(init, false, "click", cities) }
   $("#stateSelect" ).val("default").selectmenu("refresh")
   if(IS_900()){
     $("#groupSelect" ).val("1").selectmenu("refresh")
@@ -414,6 +414,9 @@ function buildGroupContent(groups, cities){
               d3.select("circle.city_" + d.slug).style("opacity",1)
               d3.select(this).style("color","#1696d2")
             })
+            .on("click", function(d){
+              window.location.href = "city.html?city=" + d.slug;
+            })
 
 
         }
@@ -494,6 +497,7 @@ function buildBottomContent(groups, cities){
     group = city.group
     groups = cities.filter(function(o){ return o.group == group})
   }
+  alphaSort(groups)
   d3.select("#bottomCitiesList")
     .selectAll(".bottomCity")
     .data(groups)
@@ -588,17 +592,7 @@ function buildCharts(cities, groups){
     var svg = container.append("svg")
       .attr("width",W)
       .attr("height",H)
-    container.append("div")
-      .datum(datum)
-      .attr("class","metricName chartContent")
-      .html(function(d){
-        if(typeof(d) == "undefined" || d[metricVar] == null){
-          d3.select("#noDataNote").style("display","block")
-          return metricName + "<sup>a</sup>"
-        }else{
-          return metricName
-        }
-      })
+
 
     var margin = {top: 60, right: 0, bottom: 10, left: 0},
     width = W - margin.left - margin.right,
@@ -623,6 +617,19 @@ function buildCharts(cities, groups){
       city.category = "city"
       data = [city, activeGroup,national]
     }
+
+    var noDataCheck = (datum == null) ? activeGroup : datum;
+    container.append("div")
+      .datum(noDataCheck)
+      .attr("class","metricName chartContent")
+      .html(function(d){
+        if(d[metricVar] == null){
+          d3.select("#noDataNote").style("display","block")
+          return metricName + "<sup>a</sup>"
+        }else{
+          return metricName
+        }
+      })
 
     if(metricVar == "pop-change"){
       var cityPc = (datum == null) ? 0 : city["pop-change"];
