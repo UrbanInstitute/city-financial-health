@@ -715,7 +715,7 @@ function buildTooltip(cities){
       .attr("class", "groupListGroup groupListGroup_" + i)
       .text(groupNames[i])
       .on("mouseover", function(d){
-        if(! IS_1000()){
+        if(IS_1000() == false){
           highlight(d, false, "hover", cities)
         }
       })
@@ -723,7 +723,7 @@ function buildTooltip(cities){
         mouseout(cities, true)
       })
       .on("click", function(d){
-        if(! IS_1000()){
+        if(IS_1000() == false){
           $("#stateSelect" ).val("default").selectmenu("refresh")
           highlight(d, false, "click", cities)
         }
@@ -751,7 +751,7 @@ function buildStateSelect(cities){
 
   d3.select("#clearSelection")
     .on("click", function(){
-      // clearSelected(cities)
+      clearSelected(cities)
     })
 
   alphaSort(cities)
