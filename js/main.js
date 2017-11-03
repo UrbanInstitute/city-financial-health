@@ -97,9 +97,8 @@ function drawMap(containerID, us, cities){
   var container = d3.select("#" + containerID)
 
   container.selectAll("svg").remove() 
-  
-  var w = container.node().getBoundingClientRect().width
-  var h = w*.618
+  var w = container.node().getBoundingClientRect().width;
+  var h = w*.618;
 
   var projection = d3.geoAlbersUsa()
     .scale(w*1.31)
@@ -113,8 +112,8 @@ function drawMap(containerID, us, cities){
 
   var svg = container
     .append("svg")
-      .style("width", w)
-      .style("height", h)
+      .style("width", w + "px")
+      .style("height", h + "px")
         .append("g");
 
   svg.selectAll(".states")

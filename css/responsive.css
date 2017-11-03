@@ -162,7 +162,7 @@
     	left: calc(50% - 277.5px);
 	}
 	#stateSelectContainer{
-		right: calc(50% - 277.5px);;
+		right: calc(50% - 277.5px);
 	}
 	#stateSelect-button{
 		top: 100px;
@@ -276,7 +276,7 @@
     	left: calc(50% - 262.5px);
 	}
 	#stateSelectContainer{
-		right: calc(50% - 262.5px);;
+		right: calc(50% - 262.5px);
 	}
 	#groupSelectLabel{
 		left: calc(50% - 200.5px);
