@@ -736,10 +736,14 @@ function buildTooltip(cities){
         highlight(d, false, "hover", cities)
       })
       .on("mouseout", function(){
-        mouseout(cities, true)
+        if(IS_1000() == false){
+          mouseout(cities, true)
+        }
       })
       .on("click", function(d){
-        highlight(d, false, "click", cities)
+        if(IS_1000() == false){
+          highlight(d, false, "click", cities)
+        }
       })
   }
 
