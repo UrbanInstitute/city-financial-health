@@ -1005,6 +1005,7 @@ function highlight(datum, isCity, action, cities, isGroupList){
 }
 
 function mouseout(cities, isGroupList){
+    if(IS_PHONE()){ return false; }
     if(PAGE == "home"){
       d3.selectAll("circle")
         .transition()
