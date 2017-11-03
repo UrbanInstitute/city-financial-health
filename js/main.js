@@ -751,7 +751,7 @@ function buildStateSelect(cities){
 
   d3.select("#clearSelection")
     .on("click", function(){
-      clearSelected(cities)
+      // clearSelected(cities)
     })
 
   alphaSort(cities)
