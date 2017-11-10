@@ -968,6 +968,14 @@ body.print .groupCity{
 	top: 0px;
 	left: 0px;
 }
+#print-fallback{
+	display: none;
+	width: 100%;
+}
+#home-print-logo{
+	display: none;
+	width: 2in;
+}
 @media print{
   @page {
     size: 210mm 297mm; /* portrait 
